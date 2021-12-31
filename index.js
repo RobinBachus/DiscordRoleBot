@@ -43,9 +43,9 @@ client.on('ready', () => {
     }
 });
 client.on('messageCreate', (message) => {
-    if (message.content.toLocaleLowerCase() === 'ping') {
+    if (message.content.toLocaleLowerCase() === 'RoleAsignBot status') {
         message.reply({
-            content: 'pong!!'
+            content: 'currently running!'
         });
     }
 });
