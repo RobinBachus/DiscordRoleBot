@@ -43,7 +43,7 @@ client.on('ready', () => {
     }
 });
 client.on('messageCreate', (message) => {
-    if (message.content.toLocaleLowerCase() === 'RoleAsignBot status') {
+    if (message.content.toLocaleLowerCase() === 'RoleAssignBot status') {
         message.reply({
             content: 'currently running!'
         });
