@@ -42,4 +42,13 @@ client.on('messageCreate', (message) => {
 })
 
 
+client.on('messageCreate', (message) => {
+    if (message.content === 'RoleAssignBot help') {
+        message.reply({
+            content: "- RoleAssignBot info:     info about the bot\n- RoleAssignBot status:     check if the bot is running\n"
+        })
+    }
+})
+
+
 client.login(process.env.TOKEN)
