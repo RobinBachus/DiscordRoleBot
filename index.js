@@ -33,6 +33,14 @@ const client = new discord_js_1.default.Client({
 });
 client.on('ready', () => {
     console.log('The bot is ready');
+    const channel = client.channels.cache.get('926445404072058880');
+    if (channel !== undefined) {
+        channel.send('💦 Sea of Thieves\n❤ Among Us\n🥰 Dead By Daylight').then(sentEmbed => {
+            sentEmbed.react("💦");
+            sentEmbed.react("❤");
+            sentEmbed.react("🥰");
+        });
+    }
 });
 client.on('messageCreate', (message) => {
     if (message.content === 'ping') {
