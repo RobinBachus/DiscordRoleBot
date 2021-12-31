@@ -24,7 +24,7 @@ client.on('ready', () => {
 })
 
 client.on('messageCreate', (message) => {
-    if (message.content === 'ping') {
+    if (message.content.toLocaleLowerCase() === 'ping') {
         message.reply({
             content: 'pong!!'
         })
