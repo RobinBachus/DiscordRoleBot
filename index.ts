@@ -36,12 +36,7 @@ client.on('messageCreate', (message) => {
 client.on('messageCreate', (message) => {
     if (message.content === 'RoleAssignBot info') {
         message.reply({
-            content: /*
-Made by Robin Bachus
-Check my source code here: github.com/RobinBachus/DiscordRoleBot
-
-Sorry for spaghetti code 🙃
-            */
+            content: "Made by Robin Bachus\nCheck my source code here: github.com/RobinBachus/DiscordRoleBot\n\nSorry for spaghetti code 🙃"
         })
     }
 })
