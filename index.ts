@@ -12,7 +12,7 @@ const client = new DiscordJS.Client({
 
 
 client.on('ready', () => {
-    console.log('The bot is ready')
+    console.log(getTime() + ': Bot startup...')
     const channel = client.channels.cache.get('926445404072058880')
     if (channel !== undefined){ 
     channel.send('💦 Sea of Thieves\n❤ Among Us\n🥰 Dead By Daylight').then(sentEmbed => {
@@ -21,6 +21,7 @@ client.on('ready', () => {
         sentEmbed.react("🥰")
     })
     }
+    console.log(getTime() + ": Bot ready")
 })
 
 
@@ -29,6 +30,7 @@ client.on('messageCreate', (message) => {
         message.reply({
             content: 'currently running!'
         })
+        console.log(getTime() + ": replied to 'status' command")
     }
 })
 
@@ -38,6 +40,7 @@ client.on('messageCreate', (message) => {
         message.reply({
             content: "Made by Robin Bachus\nCheck my source code here: github.com/RobinBachus/DiscordRoleBot\n\nSorry for spaghetti code 🙃"
         })
+        console.log(getTime() + ": replied to 'info' command")
     }
 })
 
@@ -47,8 +50,17 @@ client.on('messageCreate', (message) => {
         message.reply({
             content: "- RoleAssignBot info:     info about the bot\n- RoleAssignBot status:     check if the bot is running\n"
         })
+        console.log(getTime() + ": replied to 'help' command")
     }
 })
 
+
+function getTime(){
+    let date = new Date();
+    let today = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+    let now = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    let time = today + ' ' + now
+    return time
+}
 
 client.login(process.env.TOKEN)
