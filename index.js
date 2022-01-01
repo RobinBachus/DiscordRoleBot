@@ -44,27 +44,30 @@ client.on('ready', () => {
     console.log(getTime() + ": Bot ready");
 });
 client.on('messageCreate', (message) => {
+    var _a;
     if (message.content === 'RoleAssignBot status') {
         message.reply({
             content: 'currently running!'
         });
-        console.log(getTime() + ": replied to 'status' command");
+        console.log(getTime() + ": replied to 'status' command from '" + message.author.username + "' on '" + ((_a = message.guild) === null || _a === void 0 ? void 0 : _a.name) + "'");
     }
 });
 client.on('messageCreate', (message) => {
+    var _a;
     if (message.content === 'RoleAssignBot info') {
         message.reply({
             content: "Made by Robin Bachus\nCheck my source code here: github.com/RobinBachus/DiscordRoleBot\n\nSorry for spaghetti code 🙃"
         });
-        console.log(getTime() + ": replied to 'info' command");
+        console.log(getTime() + ": replied to 'info' command from '" + message.author.username + "' on '" + ((_a = message.guild) === null || _a === void 0 ? void 0 : _a.name) + "'");
     }
 });
 client.on('messageCreate', (message) => {
+    var _a;
     if (message.content === 'RoleAssignBot help') {
         message.reply({
             content: "- RoleAssignBot info:     info about the bot\n- RoleAssignBot status:     check if the bot is running\n"
         });
-        console.log(getTime() + ": replied to 'help' command");
+        console.log(getTime() + ": replied to 'help' command from '" + message.author.username + "' on '" + ((_a = message.guild) === null || _a === void 0 ? void 0 : _a.name) + "'");
     }
 });
 function getTime() {

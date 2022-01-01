@@ -30,7 +30,7 @@ client.on('messageCreate', (message) => {
         message.reply({
             content: 'currently running!'
         })
-        console.log(getTime() + ": replied to 'status' command")
+        console.log(getTime() + ": replied to 'status' command from '" + message.author.username + "' on '" + message.guild?.name + "'")
     }
 })
 
@@ -40,7 +40,7 @@ client.on('messageCreate', (message) => {
         message.reply({
             content: "Made by Robin Bachus\nCheck my source code here: github.com/RobinBachus/DiscordRoleBot\n\nSorry for spaghetti code 🙃"
         })
-        console.log(getTime() + ": replied to 'info' command")
+        console.log(getTime() + ": replied to 'info' command from '" + message.author.username + "' on '" + message.guild?.name + "'")
     }
 })
 
@@ -50,7 +50,7 @@ client.on('messageCreate', (message) => {
         message.reply({
             content: "- RoleAssignBot info:     info about the bot\n- RoleAssignBot status:     check if the bot is running\n"
         })
-        console.log(getTime() + ": replied to 'help' command")
+        console.log(getTime() + ": replied to 'help' command from '" + message.author.username + "' on '" + message.guild?.name + "'")
     }
 })
 
