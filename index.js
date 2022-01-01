@@ -70,7 +70,7 @@ client.on('messageCreate', (message) => {
 function getTime() {
     let date = new Date();
     let today = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    let now = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    let now = `${date.getHours() + 1}:${date.getMinutes()}:${date.getSeconds()}`; // added "+1" to hour due to server time difference
     let time = today + ' ' + now;
     return time;
 }
