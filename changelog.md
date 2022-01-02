@@ -1,4 +1,6 @@
-# This changelog is in broad terms and might miss a few changes here and there
+# Changelog
+
+This changelog is in broad terms and might miss a few changes here and there
 
 V0.1:
 
