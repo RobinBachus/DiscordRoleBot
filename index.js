@@ -33,7 +33,8 @@ const client = new discord_js_1.default.Client({
     ]
 });
 client.on('ready', () => {
-    sendLog("\nBot startup...");
+    console.log("\n");
+    sendLog("Bot startup...");
     const channel = client.channels.cache.get('927168489075126282');
     // clear bot messages on roles channel
     if (channel !== undefined) {

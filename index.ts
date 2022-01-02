@@ -13,7 +13,8 @@ const client = new DiscordJS.Client({
 
 
 client.on('ready', () => {
-    sendLog("\nBot startup...")
+    console.log("\n")
+    sendLog("Bot startup...")
     const channel = client.channels.cache.get('927168489075126282') as TextChannel
 
     // clear bot messages on roles channel
