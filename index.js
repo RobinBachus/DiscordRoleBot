@@ -33,7 +33,7 @@ const client = new discord_js_1.default.Client({
     ]
 });
 client.on('ready', () => {
-    sendLog("Bot startup...");
+    sendLog("\nBot startup...");
     const channel = client.channels.cache.get('927168489075126282');
     // clear bot messages on roles channel
     if (channel !== undefined) {
@@ -43,7 +43,7 @@ client.on('ready', () => {
             for (let i of messageList) {
                 channel.messages.delete(i[0]);
             }
-            sendLog(`deleted ${messageList.size} messages`);
+            sendLog(`deleted ${messageList.size} message(s)\n`);
         });
     }
     // send initial role message on startup
