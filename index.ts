@@ -1,4 +1,4 @@
-import DiscordJS, { Intents, TextChannel, User } from "discord.js"
+import DiscordJS, { Intents, TextChannel } from "discord.js"
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -14,7 +14,7 @@ const client = new DiscordJS.Client({
 
 client.on('ready', () => {
     sendLog("Bot startup...")
-    const channel = client.channels.cache.get('927026779628126228') as TextChannel
+    const channel = client.channels.cache.get('927168489075126282') as TextChannel
 
     // clear bot messages on roles channel
     if (channel !== undefined){ 
