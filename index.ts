@@ -1,4 +1,4 @@
-import DiscordJS, { Intents, TextChannel } from "discord.js"
+import DiscordJS, { Intents, TextChannel, User } from "discord.js"
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -6,7 +6,8 @@ dotenv.config()
 const client = new DiscordJS.Client({
     intents: [
         Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     ]
 })
 
@@ -14,7 +15,7 @@ const client = new DiscordJS.Client({
 client.on('ready', () => {
     sendLog("Bot startup...")
     const channel = client.channels.cache.get('927026779628126228') as TextChannel
-    
+
     // clear bot messages on roles channel
     if (channel !== undefined){ 
         channel.messages.fetch()
@@ -45,6 +46,49 @@ Roles:\n\
     }
     sendLog("Bot ready")
 })
+
+
+client.on('messageReactionAdd', (reaction, user) => {
+    if (user.id !== '926211660849500190'){  // exclude bot
+        if (reaction.emoji.name === '💦'){
+            const roleId = '926159528549056593'
+            const guild = reaction.message.guild
+            guild?.members.fetch(user.id)
+            .then(user => {
+                user.roles.add(roleId)
+            })
+            guild?.roles.fetch(roleId)
+            .then(role => {
+                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+            })
+        }
+        if (reaction.emoji.name === '❤'){
+            const roleId = '926467519236165644'
+            const guild = reaction.message.guild
+            guild?.members.fetch(user.id)
+            .then(user => {
+                user.roles.add(roleId)
+            })
+            guild?.roles.fetch(roleId)
+            .then(role => {
+                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+            })
+        }
+        if (reaction.emoji.name === '🥰'){
+            const roleId = '926467631886778448'
+            const guild = reaction.message.guild
+            guild?.members.fetch(user.id)
+            .then(user => {
+                user.roles.add(roleId)
+            })
+            guild?.roles.fetch(roleId)
+            .then(role => {
+                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+            })
+        }
+    }
+})
+
 
 
 client.on('messageCreate', (message) => {

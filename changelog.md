@@ -8,3 +8,7 @@ V0.1:
 - added initial welcome/role message
 - added commands: "status", "info" and "help"
 - added server log messages
+
+V0.2:
+
+- bot can now give roles to users
