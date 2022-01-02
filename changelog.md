@@ -12,3 +12,7 @@ V0.1:
 V0.2:
 
 - bot can now give roles to users
+
+V0.3:
+
+- users can now remove roles by clicking the emoji again

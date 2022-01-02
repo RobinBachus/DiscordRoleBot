@@ -53,13 +53,13 @@ Use 'RAB info' for more information\n\
 Use 'RAB help' for more commands\n\n\
 Click on the emoji to get the corresponding role\n\n\
 Roles:\n\
-    💰 | GTA\n\
-    ⚙  | Volcanoids\n\
-    🏭 | Satisfactory\n\
-    🦖 | ARK\n\
-    🔪 | Among Us\n\
-    🏴‍☠️ | Sea Of Thieves\n\
-    🎭 | Dead By Daylight").then((sentEmbed) => {
+💰  |  GTA\n\
+⚙   |  Volcanoids\n\
+🏭  |  Satisfactory\n\
+🦖  |  ARK\n\
+🔪  |  Among Us\n\
+🏴‍☠️  |  Sea Of Thieves\n\
+🎭  |  Dead By Daylight").then((sentEmbed) => {
             sentEmbed.react("💰");
             sentEmbed.react("⚙");
             sentEmbed.react("🏭");
@@ -141,6 +141,80 @@ client.on('messageReactionAdd', (reaction, user) => {
             });
             guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
                 sendLog(user.username + " was given the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+    }
+});
+client.on('messageReactionRemove', (reaction, user) => {
+    if (user.id !== '926211660849500190') { // exclude bot
+        if (reaction.emoji.name === '💰') {
+            const roleId = '673632879942565888';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+        if (reaction.emoji.name === '⚙') {
+            const roleId = '876515756777541653';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+        if (reaction.emoji.name === '🏭') {
+            const roleId = '876516149137907723';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+        if (reaction.emoji.name === '🦖') {
+            const roleId = '876516028325187585';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+        if (reaction.emoji.name === '🔪') {
+            const roleId = '876509430341058570';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+        if (reaction.emoji.name === '🏴‍☠️') {
+            const roleId = '925868985935859713';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
+            });
+        }
+        if (reaction.emoji.name === '🎭') {
+            const roleId = '876507309843554304';
+            const guild = reaction.message.guild;
+            guild === null || guild === void 0 ? void 0 : guild.members.fetch(user.id).then(user => {
+                user.roles.remove(roleId);
+            });
+            guild === null || guild === void 0 ? void 0 : guild.roles.fetch(roleId).then(role => {
+                sendLog(user.username + " has removed the " + (role === null || role === void 0 ? void 0 : role.name) + " role on " + guild.name);
             });
         }
     }
