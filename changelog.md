@@ -16,3 +16,8 @@ V0.2:
 V0.3:
 
 - users can now remove roles by clicking the emoji again
+
+V0.4:
+
+- bot now only reacts to reactions on messages in roles channel
+- bot now only sends welcome message if no welcome message exists
