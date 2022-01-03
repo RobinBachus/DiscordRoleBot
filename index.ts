@@ -1,4 +1,4 @@
-import DiscordJS, { Intents, TextChannel } from "discord.js"
+import DiscordJS, { Intents, Message, TextChannel } from "discord.js"
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -17,25 +17,35 @@ client.on('ready', () => {
     sendLog("Bot startup...")
     const channel = client.channels.cache.get('927168489075126282') as TextChannel
 
-    // clear bot messages on roles channel
-    if (channel !== undefined){ 
-        channel.messages.fetch()
-        .then((messages) => {
-            let messageList = messages.filter((m: { author: { id: string } }) => m.author.id === '926211660849500190')
-            for (let i of messageList){
-                channel.messages.delete(i[0])
+    // check if initial message is present
+    channel.messages.fetch()
+    .then((messages) => {
+        let present = false
+        for (let i of messages.values()){
+            if (i.content.includes("Click on the emoji to get the corresponding role")){
+                present = true
             }
-            sendLog(`deleted ${messageList.size} message(s)\n`)
-        })
-    }
+        }
+        // if no message is present, send a new one
+        if (!present){ 
+            // clear bot messages on roles channel
+            if (channel !== undefined){ 
+                channel.messages.fetch()
+                .then((messages) => {
+                    let messageList = messages.filter((m: { author: { id: string } }) => m.author.id === '926211660849500190')
+                    for (let i of messageList){
+                        channel.messages.delete(i[0])
+                    }
+                    sendLog(`deleted ${messageList.size} message(s)\n`)
+                })
 
-    // send initial role message on startup
-    if (channel !== undefined){ 
-    channel.send(
+                // send initial role message on startup
+                channel.send(
 "This bot is still being developed and will change over time \n\n\
 Use 'RAB info' for more information\n\
 Use 'RAB help' for more commands\n\n\
-Click on the emoji to get the corresponding role\n\n\
+Click on the emoji to get the corresponding role\n\
+Click again to remove the role\n\n\
 Roles:\n\
 💰  |  GTA\n\
 ⚙   |  Volcanoids\n\
@@ -44,195 +54,201 @@ Roles:\n\
 🔪  |  Among Us\n\
 🏴‍☠️  |  Sea Of Thieves\n\
 🎭  |  Dead By Daylight"
-        ).then((sentEmbed: { react: (arg0: string) => void }) => {
-            sentEmbed.react("💰")
-            sentEmbed.react("⚙")
-            sentEmbed.react("🏭")
-            sentEmbed.react("🦖")
-            sentEmbed.react("🔪")
-            sentEmbed.react("🏴‍☠️")
-            sentEmbed.react("🎭")
+                ).then((sentEmbed: { react: (arg0: string) => void }) => {
+                    sentEmbed.react("💰")
+                    sentEmbed.react("⚙")
+                    sentEmbed.react("🏭")
+                    sentEmbed.react("🦖")
+                    sentEmbed.react("🔪")
+                    sentEmbed.react("🏴‍☠️")
+                    sentEmbed.react("🎭")
+            })
+            }
+        }
     })
-    }
     sendLog("Bot ready")
 })
 
 
 client.on('messageReactionAdd', (reaction, user) => {
-    if (user.id !== '926211660849500190'){  // exclude bot
-        if (reaction.emoji.name === '💰'){
-            const roleId = '673632879942565888'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '⚙'){
-            const roleId = '876515756777541653'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🏭'){
-            const roleId = '876516149137907723'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🦖'){
-            const roleId = '876516028325187585'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🔪'){
-            const roleId = '876509430341058570'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🏴‍☠️'){
-            const roleId = '925868985935859713'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🎭'){
-            const roleId = '876507309843554304'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.add(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
-            })
+    if (reaction.message.channelId === '927168489075126282'){  
+        if (user.id !== '926211660849500190'){    // exclude bot
+            if (reaction.emoji.name === '💰'){
+                const roleId = '673632879942565888'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '⚙'){
+                const roleId = '876515756777541653'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🏭'){
+                const roleId = '876516149137907723'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🦖'){
+                const roleId = '876516028325187585'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🔪'){
+                const roleId = '876509430341058570'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🏴‍☠️'){
+                const roleId = '925868985935859713'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🎭'){
+                const roleId = '876507309843554304'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.add(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " was given the " + role?.name + " role on " + guild.name)
+                })
+            }
         }
     }
 })
 
 
 client.on('messageReactionRemove', (reaction, user) => {
-    if (user.id !== '926211660849500190'){  // exclude bot
-        if (reaction.emoji.name === '💰'){
-            const roleId = '673632879942565888'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '⚙'){
-            const roleId = '876515756777541653'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🏭'){
-            const roleId = '876516149137907723'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🦖'){
-            const roleId = '876516028325187585'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🔪'){
-            const roleId = '876509430341058570'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🏴‍☠️'){
-            const roleId = '925868985935859713'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
-        }
-        if (reaction.emoji.name === '🎭'){
-            const roleId = '876507309843554304'
-            const guild = reaction.message.guild
-            guild?.members.fetch(user.id)
-            .then(user => {
-                user.roles.remove(roleId)
-            })
-            guild?.roles.fetch(roleId)
-            .then(role => {
-                sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
-            })
+    if (reaction.message.channelId === '927168489075126282'){  
+        if (user.id !== '926211660849500190'){  // exclude bot
+            if (reaction.emoji.name === '💰'){
+                const roleId = '673632879942565888'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '⚙'){
+                const roleId = '876515756777541653'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🏭'){
+                const roleId = '876516149137907723'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🦖'){
+                const roleId = '876516028325187585'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🔪'){
+                const roleId = '876509430341058570'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🏴‍☠️'){
+                const roleId = '925868985935859713'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
+            if (reaction.emoji.name === '🎭'){
+                const roleId = '876507309843554304'
+                const guild = reaction.message.guild
+                guild?.members.fetch(user.id)
+                .then(user => {
+                    user.roles.remove(roleId)
+                })
+                guild?.roles.fetch(roleId)
+                .then(role => {
+                    sendLog(user.username + " has removed the " + role?.name + " role on " + guild.name)
+                })
+            }
         }
     }
 })
