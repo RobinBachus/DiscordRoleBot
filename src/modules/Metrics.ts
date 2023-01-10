@@ -1,6 +1,8 @@
 import * as io from "@pm2/io";
 import * as info from "../json/info.json";
 
+console.log("Metrics initialized");
+
 export class Metrics {
   /**
    *
