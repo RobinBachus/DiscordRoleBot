@@ -9,15 +9,15 @@ info.bot_info.version = process.env.npm_package_version || "1.0.0";
 // Set the date and time when the bot was started
 const date = new Date();
 const current_date = date.toLocaleDateString("en-BE", {
-	day: "2-digit",
-	month: "2-digit",
-	year: "numeric",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
 });
 const current_time = date.toLocaleTimeString("en-BE", {
-	timeZone: "Europe/Brussels",
-	hour: "2-digit",
-	minute: "2-digit",
-	second: "2-digit",
+  timeZone: "Europe/Brussels",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
 });
 
 info.bot_info.start_date = current_date;
