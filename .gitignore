@@ -1,6 +1,6 @@
 node_modules
 .env
+info.json
 .idea
-commands
-message_objects
-test.js
+tests/
+dist/

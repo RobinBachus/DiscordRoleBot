@@ -1,21 +1,29 @@
 {
-  "name": "testbot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc -w --skipLibCheck"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^13.5.0",
-    "dotenv": "^10.0.0",
-    "wokcommands": "^1.5.3"
-  },
-  "devDependencies": {
-    "typescript": "^4.5.4"
-  }
+	"name": "discord_role_bot",
+	"version": "0.5.0",
+	"description": "A Discord bot that assigns roles based on reactions",
+	"main": "index.js",
+	"scripts": {
+		"pretest": "npm run tsc && node ./dist/modules/setBotInfo.js",
+		"test": "node ./dist/tests/index.test.js",
+		"tsc": "tsc --downlevelIteration --skipLibCheck",
+		"tscw": "tsc -w --downlevelIteration --skipLibCheck index.ts"
+	},
+	"keywords": [
+		"Discord",
+		"Roles",
+		"Bot"
+	],
+	"author": "Robin Bachus",
+	"license": "ISC",
+	"dependencies": {
+		"discord.js": "^13.5.0",
+		"dotenv": "^10.0.0",
+		"fs": "^0.0.1-security",
+		"i": "^0.3.7",
+		"wokcommands": "^1.5.3"
+	},
+	"devDependencies": {
+		"typescript": "^4.5.4"
+	}
 }
