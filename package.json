@@ -17,12 +17,10 @@
 	"author": "Robin Bachus",
 	"license": "ISC",
 	"dependencies": {
-		"@pm2/io": "^5.0.0",
-		"discord.js": "^13.5.0",
+		"discord.js": "^14.7.1",
 		"dotenv": "^10.0.0",
 		"fs": "^0.0.1-security",
-		"i": "^0.3.7",
-		"wokcommands": "^1.5.3"
+		"nodemon": "^2.0.20"
 	},
 	"devDependencies": {
 		"typescript": "^4.5.4"

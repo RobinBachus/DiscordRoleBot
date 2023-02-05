@@ -1,386 +1,141 @@
-import { Intents, TextChannel } from "discord.js";
-import * as DiscordJS from "discord.js";
+import {
+	Client,
+	GatewayIntentBits,
+	Events,
+	TextChannel,
+	MessageReaction,
+	PartialMessageReaction,
+} from "discord.js";
+import { JsonHandler } from "./modules/jsonHandler";
+import { colors } from "./modules/colors";
 import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const client = new DiscordJS.Client({
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-  ],
+const json = new JsonHandler();
+
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.GuildMembers,
+	],
 });
 
-client.on("ready", () => {
-  console.log("\n");
-  sendLog("Bot restart...");
-  const channel = client.channels.cache.get(
-    "927168489075126282"
-  ) as TextChannel;
+client.on("ready", async () => {
+	const initError = await initialize();
 
-  // check if initial message is present
-  channel.messages.fetch().then((messages) => {
-    let present = false;
-    for (let i of messages.values()) {
-      if (
-        i.content.includes("Click on the emoji to get the corresponding role")
-      ) {
-        present = true;
-      }
-    }
-    // if no message is present, send a new one
-    if (!present) {
-      // clear bot messages on roles channel
-      if (channel !== undefined) {
-        channel.messages.fetch().then((messages) => {
-          let messageList = messages.filter(
-            (m: { author: { id: string } }) =>
-              m.author.id === "926211660849500190"
-          );
-          for (let i of messageList) {
-            channel.messages.delete(i[0]);
-          }
-          sendLog(`deleted ${messageList.size} message(s)\n`);
-        });
+	console.log(colors.Bright + "");
 
-        // send initial role message on startup
-        channel
-          .send(
-            "This bot is still being developed and will change over time \n\n\
-Use 'RAB info' for more information\n\
-Use 'RAB help' for more commands\n\n\
-Click on the emoji to get the corresponding role\n\
-Click again to remove the role\n\n\
-Roles:\n\
-💰  |  GTA\n\
-⚙   |  Volcanoids\n\
-🏭  |  Satisfactory\n\
-🦖  |  ARK\n\
-🔪  |  Among Us\n\
-🏴‍☠️  |  Sea Of Thieves\n\
-🎭  |  Dead By Daylight"
-          )
-          .then((sentEmbed: { react: (arg0: string) => void }) => {
-            sentEmbed.react("💰");
-            sentEmbed.react("⚙");
-            sentEmbed.react("🏭");
-            sentEmbed.react("🦖");
-            sentEmbed.react("🔪");
-            sentEmbed.react("🏴‍☠️");
-            sentEmbed.react("🎭");
-          });
-      }
-    }
-  });
-  sendLog("Bot ready");
+	if (!initError) console.log(colors.FgGreen + "ready!" + colors.Reset + "\n");
+	else {
+		console.log(
+			colors.FgRed +
+				"Failed to properly initialize, exiting..." +
+				colors.Reset +
+				"\n"
+		);
+		process.exit(1);
+	}
 });
 
-client.on("messageReactionAdd", (reaction, user) => {
-  if (reaction.message.channelId === "927168489075126282") {
-    if (user.id !== "926211660849500190") {
-      // exclude bot
-      const guild = reaction.message.guild;
-      if (reaction.emoji.name === "💰") {
-        const roleId = "673632879942565888";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.add(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " was given the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "⚙") {
-        const roleId = "876515756777541653";
-        addRole("876515756777541653", guild, user);
-      }
-      if (reaction.emoji.name === "🏭") {
-        const roleId = "876516149137907723";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.add(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " was given the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🦖") {
-        const roleId = "876516028325187585";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.add(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " was given the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🔪") {
-        const roleId = "876509430341058570";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.add(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " was given the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🏴‍☠️") {
-        const roleId = "925868985935859713";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.add(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " was given the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🎭") {
-        const roleId = "876507309843554304";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.add(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " was given the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-    }
-  }
+client.on(Events.MessageReactionAdd, (reaction, user) => {
+	console.log("Reaction received");
+
+	const filter = (reaction: MessageReaction | PartialMessageReaction) => {
+		const icon = reaction.emoji.name;
+		const guildID = reaction.message.guild?.id;
+		if (!icon || !guildID) {
+			console.warn(
+				`Received reaction with empty role or guild (role icon: ${icon}, guildID: ${guildID})`
+			);
+			return false;
+		}
+		const guild = json.findIGuildWithId(guildID);
+		if (!guild) {
+			console.warn(`Could not find guild with id '${guildID}')`);
+			return false;
+		}
+		return json.findIRoleWithIcon(icon, guild) !== undefined;
+	};
+
+	const message = reaction.message;
+
+	const collector = message.createReactionCollector({ filter, time: 3000 });
+
+	collector.on("collect", (reaction, user) => {
+		console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+	});
+
+	collector.on("end", (collected) => {
+		console.log(`Collected ${collected.size} items`);
+	});
 });
-
-client.on("messageReactionRemove", (reaction, user) => {
-  if (reaction.message.channelId === "927168489075126282") {
-    if (user.id !== "926211660849500190") {
-      // exclude bot
-      const guild = reaction.message.guild;
-      if (reaction.emoji.name === "💰") {
-        const roleId = "673632879942565888";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "⚙") {
-        const roleId = "876515756777541653";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🏭") {
-        const roleId = "876516149137907723";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🦖") {
-        const roleId = "876516028325187585";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🔪") {
-        const roleId = "876509430341058570";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🏴‍☠️") {
-        const roleId = "925868985935859713";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-      if (reaction.emoji.name === "🎭") {
-        const roleId = "876507309843554304";
-        guild?.members.fetch(user.id).then((user) => {
-          user.roles.remove(roleId);
-        });
-        guild?.roles.fetch(roleId).then((role) => {
-          sendLog(
-            user.username +
-              " has removed the " +
-              role?.name +
-              " role on " +
-              guild.name
-          );
-        });
-      }
-    }
-  }
-});
-
-client.on("messageCreate", (message) => {
-  if (message.content === "RAB status") {
-    message.reply({
-      content: "currently running!",
-    });
-    sendLog(
-      "replied to 'status' command from '" +
-        message.author.username +
-        "' on '" +
-        message.guild?.name +
-        "'"
-    );
-  }
-});
-
-client.on("messageCreate", (message) => {
-  if (message.content === "RAB info") {
-    message.reply({
-      content: `Made by Robin Bachus\nVersion: ${getVersion()}\nCheck my source code here: github.com/RobinBachus/DiscordRoleBot\n\nSorry for spaghetti code 🙃`,
-    });
-    sendLog(
-      "replied to 'info' command from '" +
-        message.author.username +
-        "' on '" +
-        message.guild?.name +
-        "'"
-    );
-  }
-});
-
-client.on("messageCreate", (message) => {
-  if (message.content === "RAB help") {
-    message.reply({
-      content:
-        "- RAB info:     info about the bot\n- RAB status:     check if the bot is running\n",
-    });
-    sendLog(
-      "replied to 'help' command from '" +
-        message.author.username +
-        "' on '" +
-        message.guild?.name +
-        "'"
-    );
-  }
-});
-
-function addRole(
-  roleId: string,
-  guild: DiscordJS.Guild | null,
-  user: DiscordJS.User | DiscordJS.PartialUser
-) {
-  guild?.members.fetch(user.id).then((user) => {
-    user.roles.add(roleId);
-  });
-  guild?.roles.fetch(roleId).then((role) => {
-    sendLog(
-      user.username + " was given the " + role?.name + " role on " + guild.name
-    );
-  });
-}
-
-function getTime() {
-  let date = new Date();
-  let today = date.toLocaleDateString("en-BE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  let now = date.toLocaleTimeString("en-BE", {
-    timeZone: "Europe/Brussels",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-  let time = today + " " + now;
-  return time;
-}
-
-function sendLog(message: String) {
-  console.log(`${getTime()}: ${message}`);
-}
-
-function getVersion() {
-  try {
-    return require("./package.json").version;
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 client.login(process.env.TOKEN);
+
+async function initialize() {
+	let initializationError = false;
+	const iGuilds = json.jsonFile.guilds;
+
+	process.stdout.write("\n" + colors.FgBlue + "[INFO]" + colors.Reset);
+	console.log(" Initializing guilds \n");
+	// Update member caches
+	for (let iGuild of iGuilds) {
+		const guild = await client.guilds.fetch(iGuild.guild_id);
+
+		process.stdout.write(
+			`Updating ${
+				colors.FgBlue + iGuild.guild_name + colors.Reset
+			} member cache:`.padEnd(60)
+		);
+		await guild.members
+			.fetch({ time: 5000, force: true })
+			.then(() => {
+				console.log(colors.FgGreen + "OK" + colors.Reset);
+			})
+			.catch((reason) => {
+				console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
+				initializationError = true;
+			});
+
+		process.stdout.write(
+			`Updating ${
+				colors.FgBlue + iGuild.guild_name + colors.Reset
+			} role channel cache`.padEnd(60)
+		);
+		await guild.channels
+			.fetch(iGuild.roles_channel.channel_id, { force: true })
+			.then(async (channel) => {
+				channel = channel as TextChannel;
+				console.log(colors.FgGreen + "OK" + colors.Reset);
+				process.stdout.write(
+					`Updating ${
+						colors.FgBlue + iGuild.guild_name + colors.Reset
+					} message cache`.padEnd(60)
+				);
+				if (channel) {
+					await channel.messages
+						.fetch({ cache: true })
+						.then(() => {
+							console.log(colors.FgGreen + "OK" + colors.Reset);
+						})
+						.catch((reason) => {
+							console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
+							initializationError = true;
+						});
+				} else {
+					console.log(
+						colors.FgYellow + "SKIPPED | Role channel not found" + colors.Reset
+					);
+				}
+			})
+			.catch((reason) => {
+				console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
+				initializationError = true;
+			});
+	}
+
+	return initializationError;
+}

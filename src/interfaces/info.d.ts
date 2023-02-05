@@ -1,9 +1,9 @@
-interface InfoJSON {
-	bot_info: BotInfo;
-	guilds: Guild[];
+interface InfoJson {
+	bot_info: IBotInfo;
+	guilds: IGuild[];
 }
 
-interface BotInfo {
+interface IBotInfo {
 	id: string;
 	name: string;
 	version: string;
@@ -12,24 +12,24 @@ interface BotInfo {
 	guild_amount: number;
 }
 
-interface Guild {
+interface IGuild {
 	guild_name: string;
 	guild_id: string;
-	roles: Role[];
-	roles_channel: RoleMessageChannel;
+	roles: IRole[];
+	roles_channel: IRoleMessageChannel;
 }
 
-interface Role {
+interface IRole {
 	icon: string;
 	name: string;
 	role_id: string;
 }
 
-interface MessageChannel {
+interface IMessageChannel {
 	channel_name: string;
 	channel_id: string;
 }
 
-interface RoleMessageChannel extends MessageChannel {
+interface IRoleMessageChannel extends IMessageChannel {
 	message: string;
 }
