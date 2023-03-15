@@ -3,6 +3,8 @@ node_modules
 info.json
 .idea
 # TODO uncomment tests (disables spelling checker)
-# tests/
+tests/
 dist/
 .vscode/settings.json
+certs/
+.VSCodeCounter/

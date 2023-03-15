@@ -28,4 +28,25 @@ const colors = {
 	BgGray: "\x1b[100m",
 };
 
-export { colors };
+function getDateString(date: Date) {
+	return date.toLocaleDateString("en-BE", {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+	});
+}
+
+function getTimeString(date: Date) {
+	return date.toLocaleTimeString("en-BE", {
+		timeZone: "Europe/Brussels",
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+	});
+}
+
+function getDateTimeString(date: Date) {
+	return getDateString(date) + getTimeString(date);
+}
+
+export { colors, getDateString, getTimeString, getDateTimeString };

@@ -1,5 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { JsonHandler } from "../modules/jsonHandler";
+import { getDateTimeString } from "../modules/common";
 
 const jsonHandler = new JsonHandler();
 
@@ -14,7 +15,7 @@ module.exports = {
 				.setRequired(true)
 		),
 	async execute(interaction: CommandInteraction) {
-		const guild = jsonHandler.findIGuildWithId(interaction.guildId!)!;
+		const guild = jsonHandler.guilds.findIGuildWithId(interaction.guildId!)!;
 		const roleName = interaction.options.get("role_name")?.value?.toString();
 		sendLog("received command from " + interaction.user.username);
 		if (!roleName) {
@@ -26,7 +27,7 @@ module.exports = {
 			return;
 		}
 
-		const role = jsonHandler.findIRoleWithName(roleName, guild, true);
+		const role = jsonHandler.roles.findIRoleWithName(roleName, guild, true);
 		if (!role) {
 			sendLog(
 				`[ERROR] Role '${roleName}' does not exist on ${guild.guild_name}`
@@ -51,23 +52,6 @@ module.exports = {
 	},
 };
 
-function getTime() {
-	let date = new Date();
-	let today = date.toLocaleDateString("en-BE", {
-		day: "2-digit",
-		month: "2-digit",
-		year: "numeric",
-	});
-	let now = date.toLocaleTimeString("en-BE", {
-		timeZone: "Europe/Brussels",
-		hour: "2-digit",
-		minute: "2-digit",
-		second: "2-digit",
-	});
-	let time = today + " " + now;
-	return time;
-}
-
 function sendLog(message: String) {
-	console.log(`${getTime()}: ${message}`);
+	console.log(`${getDateTimeString(new Date())}: ${message}`);
 }
