@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "jest",
 		"tsc": "tsc --downlevelIteration --skipLibCheck",
-		"tscw": "tsc -w --downlevelIteration --skipLibCheck index.ts"
+		"tscw": "tsc -w --downlevelIteration --skipLibCheck index.ts",
+		"start": "node ./dist/index.js"
 	},
 	"keywords": [
 		"Discord",
