@@ -2,9 +2,12 @@ import { Client } from "discord.js";
 import { logging } from "./logging";
 import { cacheManager } from "./cacheManager";
 import { dbHandler } from "./dbHandler";
+import { JsonHandler } from "./jsonHandler";
+import { writeFile } from "fs/promises";
 
 const logger = new logging(3);
 const cache = new cacheManager(logger);
+const json = new JsonHandler();
 const db = new dbHandler(logger);
 
 export class botHelper {
@@ -34,4 +37,19 @@ export class botHelper {
 
 		return success;
 	}
+
+	// TODO: Implement function
+	public async updateJsonCache() {
+		let cache = {
+			bot_info: {},
+			guilds: Array<IGuild>(),
+		};
+		cache.bot_info = await db.getBotInfo();
+		cache.guilds = await db.find({} as IMultipleGuildSearch);
+
+		json.jsonFile.writeJsonFile(cache as IJsonCacheData);
+	}
+
+	// TODO: Implement function
+	public updateDiscordCache() {}
 }

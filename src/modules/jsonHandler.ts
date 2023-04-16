@@ -13,9 +13,7 @@ export class JsonHandler {
 	 */
 	constructor() {
 		this.file = info as IJsonCacheData;
-		this.json.updateJsonFile();
-		// TODO: Move interval to botHelper class
-		this.updateInterval = setInterval(() => {}, 43200000);
+		this.jsonFile.updateJsonFile();
 	}
 
 	/**
@@ -26,16 +24,15 @@ export class JsonHandler {
 	 * @internal
 	 */
 	private file: IJsonCacheData;
-	private filePath: string = __dirname + "\\..\\json\\info.json";
-	private updateInterval: ReturnType<typeof setInterval>;
+	private filePath: string = __dirname + "\\..\\json\\cache.json";
 
-	json = {
+	jsonFile = {
 		/**
 		 * Get the up to date `info.json` file as an {@link IJsonCacheData | InfoJson} object.
 		 * @returns The json file as an object.
 		 */
 		getJsonFile: async () => {
-			await this.json.updateJsonFile();
+			await this.jsonFile.updateJsonFile();
 			return this.file;
 		},
 
@@ -47,8 +44,8 @@ export class JsonHandler {
 		 */
 		writeJsonFile: async (file?: IJsonCacheData | null) => {
 			if (!file) file = this.file;
-			console.log(this.filePath);
 			await writeFile(this.filePath, JSON.stringify(file));
+			this.jsonFile.updateJsonFile();
 		},
 
 		/**
@@ -62,13 +59,8 @@ export class JsonHandler {
 		updateJsonFile: async (logError = true) => {
 			const update = this.state.update;
 			update.errorMessage = undefined;
-
 			const date = new Date();
 			update.lastUpdate = date;
-
-			// FIXME: What is this?
-			try {
-			} catch {}
 
 			let fileText = "";
 			try {
@@ -90,8 +82,6 @@ export class JsonHandler {
 				return null;
 			}
 		},
-
-		async getDataFromDatabase() {},
 	};
 
 	state: IState = {
@@ -147,7 +137,7 @@ export class JsonHandler {
 		 */
 		getAllRoles: async (guildId = "") => {
 			let roles = new Array<IRole>();
-			this.json.getJsonFile().then((f) => {
+			this.jsonFile.getJsonFile().then((f) => {
 				for (let guild of f.guilds) {
 					if (guild.guild_id === guildId || guildId === "")
 						for (let role of guild.roles) {

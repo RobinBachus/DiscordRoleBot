@@ -1,16 +1,8 @@
+import { colors } from "./common";
 /**
  * A logging class that provides various methods for logging information.
  */
 export class logging {
-	private colors = {
-		Reset: "\x1b[0m",
-		FgRed: "\x1b[31m",
-		FgGreen: "\x1b[32m",
-		FgYellow: "\x1b[33m",
-		FgBlue: "\x1b[34m",
-		FgCyan: "\x1b[36m",
-	};
-
 	/**
 	 * Creates a new logging instance with the specified log level.
 	 * @param level The log level to use.
@@ -20,7 +12,7 @@ export class logging {
 	}
 
 	/** The log level for this instance. */
-	public logLevel: number;
+	private logLevel: number;
 
 	/**
 	 * Changes the log level
@@ -38,7 +30,7 @@ export class logging {
 	logUpdateStart(guildName: string, processDescription: string) {
 		if (this.logLevel < 2) return;
 		const message =
-			`Updating ${this.colors.FgBlue}${guildName}${this.colors.Reset} ${processDescription}`.padEnd(
+			`Updating ${colors.FgBlue}${guildName}${colors.Reset} ${processDescription}`.padEnd(
 				60
 			);
 		process.stdout.write(message);
@@ -62,7 +54,7 @@ export class logging {
 	logFetch(type: string, guildName: string) {
 		if (this.logLevel < 2) return;
 		const message =
-			`Fetching ${type} ${this.colors.FgCyan}'${guildName}'${this.colors.Reset}`.padEnd(
+			`Fetching ${type} ${colors.FgCyan}'${guildName}'${colors.Reset}`.padEnd(
 				60
 			);
 		process.stdout.write(message);
@@ -78,15 +70,11 @@ export class logging {
 	logProcessResult(success: false, reason: string, skipped?: boolean): void;
 	logProcessResult(success = true, reason?: string, skipped?: boolean) {
 		if (success === true && this.logLevel > 1) {
-			console.log(this.colors.FgGreen + "OK" + this.colors.Reset);
+			console.log(colors.FgGreen + "OK" + colors.Reset);
 		} else if (skipped && this.logLevel > 0) {
-			console.log(
-				this.colors.FgYellow + "SKIPPED | " + reason + this.colors.Reset
-			);
+			console.log(colors.FgYellow + "SKIPPED | " + reason + colors.Reset);
 		} else if (success === false && !skipped) {
-			console.log(
-				this.colors.FgRed + "FAILED  | " + reason + this.colors.Reset
-			);
+			console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
 		} else return;
 	}
 
@@ -96,7 +84,7 @@ export class logging {
 	 */
 	logInfoMessage(message: string) {
 		if (this.logLevel < 2) return;
-		process.stdout.write(`\n${this.colors.FgBlue}[INFO]${this.colors.Reset}`);
+		process.stdout.write(`\n${colors.FgBlue}[INFO]${colors.Reset}`);
 		console.log(` ${message}`);
 	}
 }

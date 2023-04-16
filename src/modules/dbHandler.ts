@@ -8,6 +8,7 @@ import {
 	UpdateResult,
 } from "mongodb";
 import type { logging } from "./logging";
+import { getLocalUnixTime } from "./common";
 
 dotenv.config();
 
@@ -80,19 +81,17 @@ export class dbHandler {
 			this.logger.logProcessResult(false, "Connection test failed", true);
 			return false;
 		} else {
-			const date = Date.now() + 3.6e6;
+			const UnixTimeStamp = getLocalUnixTime();
+
+			const date = { $numberLong: `${UnixTimeStamp}` };
+			const version = process.env.npm_package_version || "not set";
+			const set = {
+				start_date: { $date: date },
+				version: version,
+			};
+
 			try {
-				await this.updateBotInfo({
-					$set: {
-						start_date: {
-							$date: { $numberLong: `${date}` },
-						},
-						last_update: {
-							$date: { $numberLong: `${date}` },
-						},
-						version: process.env.npm_package_version || "not set",
-					},
-				});
+				await this.updateBotInfo({ $set: set }, UnixTimeStamp);
 				this.logger.logProcessResult(true);
 				return true;
 			} catch (e: any) {
@@ -159,7 +158,7 @@ export class dbHandler {
 	 * Updates values in the BotInfo Collection of the database.
 	 *
 	 * @param newInfo The new values to set. If undefined, only the last_update date will be changed.
-	 * @param date The date in unix
+	 * @param date The date as a unix timestamp
 	 * @returns
 	 */
 	async updateBotInfo(
@@ -171,7 +170,7 @@ export class dbHandler {
 		let result: UpdateResult | undefined;
 		let error: any;
 		try {
-			date = date || Date.now() + 3.6e6;
+			date = date || getLocalUnixTime();
 			newInfo.$set.last_update = { $date: { $numberLong: `${date}` } };
 			await this.client.connect();
 			const collection = this.getDBCollection("BotInfo");
@@ -208,6 +207,7 @@ export class dbHandler {
 			const collection = this.getDBCollection();
 			const cursor = collection.find<IGuild>(query);
 			if (limit) cursor.limit(limit);
+			await this.client.connect();
 			await cursor.forEach((guild) => {
 				guilds.push(guild);
 			});
