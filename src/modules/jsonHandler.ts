@@ -63,6 +63,7 @@ export class JsonHandler {
       const date = new Date();
       update.lastUpdate = date;
 
+      // FIXME: What is this?
       try {
       } catch {}
 

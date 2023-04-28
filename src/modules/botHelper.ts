@@ -2,7 +2,7 @@ import { Client } from "discord.js";
 import { logging } from "./logging";
 import { cacheManager } from "./cacheManager";
 
-const logger = new logging(1);
+const logger = new logging(3);
 const cache = new cacheManager(logger);
 
 export class botHelper {

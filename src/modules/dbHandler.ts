@@ -21,6 +21,11 @@ interface testForm {
 }
 
 export class dbHandler {
+	/**
+	 * Returns the collection to execute an operation on
+	 *
+	 * @param test If a test collection is used (Default is false)
+	 */
 	private getDBCollection(test?: false): Collection<IGuild>;
 	private getDBCollection(test: true): Collection<testForm>;
 	private getDBCollection(test = false) {
@@ -32,14 +37,16 @@ export class dbHandler {
 	}
 
 	/**
+	 * Test the connection to the database by checking if it can find a guild with the provided id
+	 * and then check if the name is correct
 	 *
 	 * @param guildID Optional parameter for overriding the default ID (926158974074638456)
-	 * @param guildName Optional parameter for overriding the default ID (Bot Test Server)
+	 * @param guildName Optional parameter for overriding the default name (Bot Test Server)
 	 */
-	testConnection = async (
+	async testConnection(
 		guildID = "926158974074638456",
 		guildName = "Bot Test Server"
-	) => {
+	) {
 		try {
 			const guild = await this.find({ guild_id: guildID }, 1);
 			if (!guild || guild.guild_name !== guildName) {
@@ -48,8 +55,15 @@ export class dbHandler {
 		} catch (e) {
 			throw new Error("Connection test failed => \n" + e);
 		}
-	};
+	}
 
+	/**
+	 * Find guilds in the database
+	 *
+	 * @param query Partial guild(s) to find using MongoDB query elements
+	 * @param limit How many guilds should be returned. If this is set to 1 the return type will be an {@link IGuild} object.
+	 * Otherwise it will return an array of {@link IGuild} objects
+	 */
 	find(query: Partial<IGuild>, limit?: number): Promise<IGuild[]>;
 	find(query: IMultipleGuildSearch, limit?: number): Promise<IGuild[]>;
 	find(query: Partial<IGuild>, limit: 1): Promise<IGuild>;
