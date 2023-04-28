@@ -4,9 +4,10 @@
 	"description": "A Discord bot that assigns roles based on reactions",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --detectOpenHandles",
 		"tsc": "tsc --downlevelIteration --skipLibCheck",
-		"tscw": "tsc -w --downlevelIteration --skipLibCheck index.ts"
+		"tscw": "tsc -w --downlevelIteration --skipLibCheck index.ts",
+		"start": "node ./dist/index.js"
 	},
 	"keywords": [
 		"Discord",

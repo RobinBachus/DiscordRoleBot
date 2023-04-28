@@ -1,6 +1,6 @@
 node_modules
 .env
-info.json
+src/json/*
 .idea
 # TODO uncomment tests (disables spelling checker)
 tests/
