@@ -30,9 +30,7 @@ export class logging {
 	logUpdateStart(guildName: string, processDescription: string) {
 		if (this.logLevel < 2) return;
 		const message =
-			`Updating ${colors.FgBlue}${guildName}${colors.Reset} ${processDescription}`.padEnd(
-				60
-			);
+			`Updating ${colors.FgBlue}${guildName}${colors.Reset} ${processDescription}`.padEnd(60);
 		process.stdout.write(message);
 	}
 
@@ -53,10 +51,7 @@ export class logging {
 	 */
 	logFetch(type: string, guildName: string) {
 		if (this.logLevel < 2) return;
-		const message =
-			`Fetching ${type} ${colors.FgCyan}'${guildName}'${colors.Reset}`.padEnd(
-				60
-			);
+		const message = `Fetching ${type} ${colors.FgCyan}'${guildName}'${colors.Reset}`.padEnd(60);
 		process.stdout.write(message);
 	}
 

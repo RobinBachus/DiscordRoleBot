@@ -31,10 +31,7 @@ client.on("ready", async () => {
 		process.exit(0);
 	} else {
 		console.log(
-			colors.FgRed +
-				"Failed to properly initialize, exiting..." +
-				colors.Reset +
-				"\n"
+			colors.FgRed + "Failed to properly initialize, exiting..." + colors.Reset + "\n"
 		);
 		process.exit(1);
 	}

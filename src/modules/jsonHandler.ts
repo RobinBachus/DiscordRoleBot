@@ -106,9 +106,7 @@ export class JsonHandler {
 				return guild.roles.find((r) => r.role_id === id) as IRole | undefined;
 			} else {
 				for (const guild of info.guilds) {
-					const role = guild.roles.find((r) => r.role_id === id) as
-						| IRole
-						| undefined;
+					const role = guild.roles.find((r) => r.role_id === id) as IRole | undefined;
 					if (role) {
 						return role;
 					}
@@ -118,12 +116,11 @@ export class JsonHandler {
 		},
 
 		findIRoleWithName: (name: string, guild: IGuild, lowerCase?: boolean) => {
-			if (!lowerCase)
-				return guild.roles.find((r) => r.name === name) as IRole | undefined;
+			if (!lowerCase) return guild.roles.find((r) => r.name === name) as IRole | undefined;
 			else {
-				return guild.roles.find(
-					(r) => r.name.toLowerCase() === name.toLowerCase()
-				) as IRole | undefined;
+				return guild.roles.find((r) => r.name.toLowerCase() === name.toLowerCase()) as
+					| IRole
+					| undefined;
 			}
 		},
 		findIRoleWithIcon: (icon: string, guild: IGuild) => {
@@ -155,9 +152,7 @@ export class JsonHandler {
 		},
 
 		findIGuildWithName: (name: string) => {
-			return info.guilds.find((r) => r.guild_name === name) as
-				| IGuild
-				| undefined;
+			return info.guilds.find((r) => r.guild_name === name) as IGuild | undefined;
 		},
 	};
 }
