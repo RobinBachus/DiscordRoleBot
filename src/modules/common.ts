@@ -28,7 +28,7 @@ export enum colors {
 	BgGray = "\x1b[100m",
 }
 
-export function getDateString(date: Date) {
+export function getDateString(date = new Date()) {
 	return date.toLocaleDateString("en-BE", {
 		day: "2-digit",
 		month: "2-digit",
@@ -36,7 +36,7 @@ export function getDateString(date: Date) {
 	});
 }
 
-export function getTimeString(date: Date) {
+export function getTimeString(date = new Date()) {
 	return date.toLocaleTimeString("en-BE", {
 		timeZone: "Europe/Brussels",
 		hour: "2-digit",
@@ -45,8 +45,8 @@ export function getTimeString(date: Date) {
 	});
 }
 
-export function getDateTimeString(date: Date) {
-	return getDateString(date) + getTimeString(date);
+export function getDateTimeString(date = new Date()) {
+	return `${getDateString(date)}T${getTimeString(date)}`;
 }
 
 export function getOffsetMs(date = new Date()) {

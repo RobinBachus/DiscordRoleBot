@@ -2,7 +2,7 @@ import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { jsonHandler } from "../modules/jsonHandler";
 import { getDateTimeString } from "../modules/common";
 
-const jsonHandler = new jsonHandler();
+const json = new jsonHandler();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,7 +12,7 @@ module.exports = {
 			option.setName("role_name").setDescription("The name of the role").setRequired(true)
 		),
 	async execute(interaction: CommandInteraction) {
-		const guild = jsonHandler.guilds.findIGuildWithId(interaction.guildId!)!;
+		const guild = json.guilds.findIGuildWithId(interaction.guildId!)!;
 		const roleName = interaction.options.get("role_name")?.value?.toString();
 		sendLog("received command from " + interaction.user.username);
 		if (!roleName) {
@@ -24,7 +24,7 @@ module.exports = {
 			return;
 		}
 
-		const role = jsonHandler.roles.findIRoleWithName(roleName, guild, true);
+		const role = json.roles.findIRoleWithName(roleName, guild, true);
 		if (!role) {
 			sendLog(`[ERROR] Role '${roleName}' does not exist on ${guild.guild_name}`);
 			await interaction.reply({

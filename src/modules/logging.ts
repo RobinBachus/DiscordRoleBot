@@ -1,16 +1,9 @@
 import { colors } from "./common";
+
 /**
  * A logging class that provides various methods for logging information.
  */
 export class logging {
-	/**
-	 * Creates a new logging instance with the specified log level.
-	 * @param level The log level to use.
-	 */
-	// constructor(level: number) {
-	// 	this.logLevel = level;
-	// }
-
 	/** The log level for this instance. */
 	private static logLevel = 3;
 

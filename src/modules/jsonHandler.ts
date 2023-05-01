@@ -1,5 +1,7 @@
-import * as info from "../json/info.json";
 import { writeFile } from "fs/promises";
+
+import * as info from "../json/info.json";
+
 import fs from "fs";
 
 export class jsonHandler {

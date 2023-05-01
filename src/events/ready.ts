@@ -2,8 +2,9 @@ import { Client, Events } from "discord.js";
 
 import dotenv from "dotenv";
 
-import { colors } from "../modules/common";
+import { colors, getDateTimeString } from "../modules/common";
 import { botHelper } from "../modules/botHelper";
+import { logging } from "../modules/logging";
 
 dotenv.config();
 
@@ -13,10 +14,11 @@ module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	async execute(client: Client) {
-        if (!client.user) throw new Error("Client has no user!")
-        console.log(`Client logged in as ${client.user.tag}`);
+		logging.logInfoMessage(`Started on ${getDateTimeString()}`);
+		if (!client.user) throw new Error("Client has no user!");
+		logging.logInfoMessage(`Client successfully logged in as ${client.user.tag}`);
 
-        const initSuccessList = await bot.initialize(client);
+		const initSuccessList = await bot.initialize(client);
 
 		console.log(colors.Bright + "");
 
@@ -24,7 +26,6 @@ module.exports = {
 
 		if (initSuccess) {
 			console.log(colors.FgGreen + "ready!" + colors.Reset + "\n");
-			process.exit(0);
 		} else {
 			console.log(
 				colors.FgRed + "Failed to properly initialize, exiting..." + colors.Reset + "\n"

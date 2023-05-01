@@ -1,9 +1,9 @@
 import { Client } from "discord.js";
+
 import { logging } from "./logging";
 import { cacheManager } from "./cacheManager";
 import { dbHandler } from "./dbHandler";
 import { jsonHandler } from "./jsonHandler";
-import { Logger } from "winston";
 
 export class botHelper {
 	private json: jsonHandler;

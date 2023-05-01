@@ -1,6 +1,8 @@
+import { Collection, Document, MongoClient, MongoNetworkError, UpdateResult } from "mongodb";
+
 import dotenv from "dotenv";
 import path from "path";
-import { Collection, Document, MongoClient, MongoNetworkError, UpdateResult } from "mongodb";
+
 import { logging } from "./logging";
 import { getLocalUnixTime } from "./common";
 
