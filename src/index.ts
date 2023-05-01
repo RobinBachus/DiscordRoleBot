@@ -1,13 +1,16 @@
 import { Client, Events, GatewayIntentBits, MessageReaction } from "discord.js";
-import * as dotenv from "dotenv";
 
-import { colors } from "./modules/common";
-import { JsonHandler } from "./modules/jsonHandler";
+import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
+
+import { jsonHandler } from "./modules/jsonHandler";
 import { botHelper } from "./modules/botHelper";
+import { logging } from "./modules/logging";
 
 dotenv.config();
 
-const json = new JsonHandler();
+const json = new jsonHandler();
 const bot = new botHelper();
 
 const client = new Client({
@@ -19,23 +22,7 @@ const client = new Client({
 	],
 });
 
-client.on("ready", async () => {
-	const initSuccessList = await bot.initialize(client);
-
-	console.log(colors.Bright + "");
-
-	const initSuccess = !initSuccessList.includes(false);
-
-	if (initSuccess) {
-		console.log(colors.FgGreen + "ready!" + colors.Reset + "\n");
-		process.exit(0);
-	} else {
-		console.log(
-			colors.FgRed + "Failed to properly initialize, exiting..." + colors.Reset + "\n"
-		);
-		process.exit(1);
-	}
-});
+client.on("ready", async () => {});
 
 client.on(Events.MessageReactionAdd, (reaction, user) => {
 	console.log("Reaction received");
@@ -69,5 +56,18 @@ client.on(Events.MessageReactionAdd, (reaction, user) => {
 		console.log(`Collected ${collected.size} items`);
 	});
 });
+
+const eventsPath = path.join(__dirname, "events");
+const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 
 client.login(process.env.TOKEN);

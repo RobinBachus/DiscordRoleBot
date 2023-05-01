@@ -2,7 +2,7 @@ import * as info from "../json/info.json";
 import { writeFile } from "fs/promises";
 import fs from "fs";
 
-export class JsonHandler {
+export class jsonHandler {
 	/**
 	 * A handler class for the json file that contains all the info about the bot (id, version...)
 	 * and info the bot needs to manage the guilds.

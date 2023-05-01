@@ -1,22 +1,12 @@
 import dotenv from "dotenv";
 import path from "path";
-import {
-	Collection,
-	Document,
-	MongoClient,
-	MongoNetworkError,
-	UpdateResult,
-} from "mongodb";
-import type { logging } from "./logging";
+import { Collection, Document, MongoClient, MongoNetworkError, UpdateResult } from "mongodb";
+import { logging } from "./logging";
 import { getLocalUnixTime } from "./common";
 
 dotenv.config();
 
-const cert = path.join(
-	__dirname,
-	"../../",
-	process.env.DB_TLS_CERTIFICATE || ""
-);
+const cert = path.join(__dirname, "../../", process.env.DB_TLS_CERTIFICATE || "");
 const connectionString = process.env.DB_CONNECTION_STRING + cert;
 
 //TODO: Delete test type
@@ -28,17 +18,11 @@ interface testForm {
 
 export class dbHandler {
 	/**
-	 * Returns the collection to execute an operation on
-	 *
-	 * @param test If a test collection is used (Default is false)
-	 */
-	/**
 	 * Create a dbHandler object used for interacting with the database
 	 *
 	 * @param logger The logging object to use for logging
 	 */
-	constructor(logger: logging) {
-		this.logger = logger;
+	constructor() {
 		this.client = new MongoClient(connectionString, {
 			connectTimeoutMS: 5000,
 			serverSelectionTimeoutMS: 5000,
@@ -46,7 +30,6 @@ export class dbHandler {
 	}
 
 	private client: MongoClient;
-	private logger: logging;
 
 	/**
 	 * Returns the collection to execute an operation on
@@ -78,12 +61,12 @@ export class dbHandler {
 			result = await this.testConnection();
 		} catch (e) {
 			result = undefined;
-			this.logger.logProcessResult(false, e as string);
+			logging.logProcessResult(false, e as string);
 		}
 
-		this.logger.logProcessStart("Setting database bot info");
+		logging.logProcessStart("Setting database bot info");
 		if (!result) {
-			this.logger.logProcessResult(false, "Connection test failed", true);
+			logging.logProcessResult(false, "Connection test failed", true);
 			return false;
 		} else {
 			const UnixTimeStamp = getLocalUnixTime();
@@ -97,10 +80,10 @@ export class dbHandler {
 
 			try {
 				await this.updateBotInfo({ $set: set }, UnixTimeStamp);
-				this.logger.logProcessResult(true);
+				logging.logProcessResult(true);
 				return true;
 			} catch (e: any) {
-				this.logger.logProcessResult(false, e);
+				logging.logProcessResult(false, e);
 				throw new Error(e);
 			}
 		}
@@ -114,7 +97,7 @@ export class dbHandler {
 	 */
 	async testConnection() {
 		let error: any;
-		this.logger.logProcessStart("Testing database connection");
+		logging.logProcessStart("Testing database connection");
 		let response: Document | undefined = undefined;
 		try {
 			response = await this.client.connect().then(async (_) => {
@@ -124,7 +107,7 @@ export class dbHandler {
 				const res = JSON.stringify(response);
 				throw new EvalError(`Ping returned '${res}' (expected '{"ok":1}')`);
 			}
-			this.logger.logProcessResult(true);
+			logging.logProcessResult(true);
 		} catch (e) {
 			error = e;
 		} finally {
@@ -154,8 +137,7 @@ export class dbHandler {
 		if (botInfo) return botInfo;
 		else
 			throw new Error(
-				"There was a problem retrieving bot information from the database => " +
-					error
+				"There was a problem retrieving bot information from the database => " + error
 			);
 	}
 

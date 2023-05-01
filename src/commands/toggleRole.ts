@@ -1,18 +1,15 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { JsonHandler } from "../modules/jsonHandler";
+import { jsonHandler } from "../modules/jsonHandler";
 import { getDateTimeString } from "../modules/common";
 
-const jsonHandler = new JsonHandler();
+const jsonHandler = new jsonHandler();
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("role")
 		.setDescription("Gives the user a role")
 		.addStringOption((option) =>
-			option
-				.setName("role_name")
-				.setDescription("The name of the role")
-				.setRequired(true)
+			option.setName("role_name").setDescription("The name of the role").setRequired(true)
 		),
 	async execute(interaction: CommandInteraction) {
 		const guild = jsonHandler.guilds.findIGuildWithId(interaction.guildId!)!;
@@ -29,18 +26,14 @@ module.exports = {
 
 		const role = jsonHandler.roles.findIRoleWithName(roleName, guild, true);
 		if (!role) {
-			sendLog(
-				`[ERROR] Role '${roleName}' does not exist on ${guild.guild_name}`
-			);
+			sendLog(`[ERROR] Role '${roleName}' does not exist on ${guild.guild_name}`);
 			await interaction.reply({
 				content: `[ERROR] Role '${roleName}' does not exist on ${guild.guild_name}`,
 				ephemeral: true,
 			});
 			return;
 		} else {
-			sendLog(
-				`${interaction.user.username} was given the '${role.icon} ${role.name}' role`
-			);
+			sendLog(`${interaction.user.username} was given the '${role.icon} ${role.name}' role`);
 			const member = await interaction.guild?.members.fetch(interaction.user);
 			if (member) member.roles.add(role.role_id);
 			await interaction.reply({
