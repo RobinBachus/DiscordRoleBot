@@ -1,7 +1,7 @@
 import { Guild, ChannelType, TextChannel, OAuth2Guild } from "discord.js";
 
 import { jsonHandler } from "./jsonHandler";
-import { logging } from "./logging";
+import { PR, logging } from "./logging";
 
 const json = new jsonHandler();
 
@@ -10,11 +10,11 @@ export class cacheManager {
 		logging.logFetch("guild", OAuth2Guild.name);
 		return await OAuth2Guild.fetch()
 			.then((guild) => {
-				logging.logProcessResult(true);
+				logging.logProcessResult(PR.success);
 				return guild;
 			})
 			.catch((reason) => {
-				logging.logProcessResult(false, reason);
+				logging.logProcessResult(PR.failed, reason);
 				return null;
 			});
 	}
@@ -25,11 +25,11 @@ export class cacheManager {
 		const success = await discordGuild.members
 			.fetch({ time: timeout, force: true })
 			.then(() => {
-				logging.logProcessResult(true);
+				logging.logProcessResult(PR.success);
 				return true;
 			})
 			.catch((reason) => {
-				logging.logProcessResult(false, reason);
+				logging.logProcessResult(PR.failed, reason);
 				return false;
 			});
 		return success;
@@ -43,7 +43,7 @@ export class cacheManager {
 		if (iGuild) roleChannel = iGuild.roles_channel;
 		else {
 			const reason = `[ERROR] Could not find guild '${discordGuild.name}' with id '${discordGuild.id}' in JSON`;
-			logging.logProcessResult(false, reason);
+			logging.logProcessResult(PR.failed, reason);
 			return null;
 		}
 
@@ -55,7 +55,7 @@ export class cacheManager {
 			.then((channel) => {
 				if (!channel) {
 					const reason = `[ERROR] Unable to find role channel with id '${roleChannel.channel_id}'`;
-					logging.logProcessResult(false, reason);
+					logging.logProcessResult(PR.failed, reason);
 					return null;
 				}
 				if (channel.type !== ChannelType.GuildText) {
@@ -64,14 +64,14 @@ export class cacheManager {
 					}' is not a text channel ('GuildText') but a '${
 						ChannelType[channel.type]
 					}' channel`;
-					logging.logProcessResult(false, reason);
+					logging.logProcessResult(PR.failed, reason);
 					return null;
 				}
-				logging.logProcessResult(true);
+				logging.logProcessResult(PR.success);
 				return channel;
 			})
 			.catch((reason) => {
-				logging.logProcessResult(false, reason);
+				logging.logProcessResult(PR.failed, reason);
 				return null;
 			});
 
@@ -82,18 +82,18 @@ export class cacheManager {
 		logging.logUpdateStart(discordGuild.name, "message cache");
 
 		if (!channel) {
-			logging.logProcessResult(false, "Role channel not found", true);
+			logging.logProcessResult(PR.skipped, "Role channel not found");
 			return false;
 		}
 
 		const success = await channel.messages
 			.fetch({ cache: true })
 			.then(() => {
-				logging.logProcessResult(true);
+				logging.logProcessResult(PR.success);
 				return true;
 			})
 			.catch((reason) => {
-				logging.logProcessResult(false, reason);
+				logging.logProcessResult(PR.failed, reason);
 				return false;
 			});
 

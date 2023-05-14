@@ -1,6 +1,15 @@
 import { colors } from "./common";
 
 /**
+ * Values that indicate the result of a process
+ */
+export enum PR {
+	success,
+	failed,
+	skipped,
+}
+
+/**
  * A logging class that provides various methods for logging information.
  */
 export class logging {
@@ -49,29 +58,33 @@ export class logging {
 
 	/**
 	 * Logs the result of a process.
-	 * @param success Whether the process succeeded.
-	 * @param reason The reason for the result, if applicable.
-	 * @param skipped Whether the process was skipped.
+	 * @param processResult The resulting state of the process
+	 * @param reason The reason for a failed or skipped process.
 	 */
-	static logProcessResult(success: true): void;
-	static logProcessResult(success: false, reason: string, skipped?: boolean): void;
-	static logProcessResult(success = true, reason?: string, skipped?: boolean) {
-		if (success === true && this.logLevel > 1) {
-			console.log(colors.FgGreen + "OK" + colors.Reset);
-		} else if (skipped && this.logLevel > 0) {
-			console.log(colors.FgYellow + "SKIPPED | " + reason + colors.Reset);
-		} else if (success === false && !skipped) {
-			console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
-		} else return;
+	static logProcessResult(processResult: PR.success): void;
+	static logProcessResult(success: PR.failed | PR.skipped, reason: string): void;
+	static logProcessResult(success = PR.success, reason?: string) {
+		switch (success) {
+			case PR.success:
+				console.log(colors.FgGreen + "OK" + colors.Reset);
+				break;
+			case PR.failed:
+				if (this.logLevel > 0)
+					console.log(colors.FgYellow + "SKIPPED | " + reason + colors.Reset);
+				break;
+			case PR.skipped:
+				console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
+				break;
+		}
 	}
 
 	/**
 	 * Logs an informational message.
 	 * @param message The message to log.
+	 * @param [newline=true] If the message should be printed on a new line. Default is ´true´
 	 */
-	static logInfoMessage(message: string) {
+	static logInfoMessage(message: string, newline = true) {
 		if (this.logLevel < 2) return;
-		process.stdout.write(`\n${colors.FgBlue}[INFO]${colors.Reset}`);
-		console.log(` ${message}`);
+		console.log(`${newline ? "\n" : ""}${colors.FgBlue}[INFO]${colors.Reset} ${message}`);
 	}
 }

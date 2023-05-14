@@ -16,7 +16,7 @@ module.exports = {
 	async execute(client: Client) {
 		logging.logInfoMessage(`Started on ${getDateTimeString()}`);
 		if (!client.user) throw new Error("Client has no user!");
-		logging.logInfoMessage(`Client successfully logged in as ${client.user.tag}`);
+		logging.logInfoMessage(`Client successfully logged in as ${client.user.tag}`, false);
 
 		const initSuccessList = await bot.initialize(client);
 

@@ -4,13 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 
-import { jsonHandler } from "./modules/jsonHandler";
-import { botHelper } from "./modules/botHelper";
-
 dotenv.config();
-
-const json = new jsonHandler();
-const bot = new botHelper();
 
 const client = new Client({
 	intents: [

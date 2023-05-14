@@ -3,7 +3,7 @@ import { Collection, Document, MongoClient, MongoNetworkError, UpdateResult } fr
 import dotenv from "dotenv";
 import path from "path";
 
-import { logging } from "./logging";
+import { PR, logging } from "./logging";
 import { getLocalUnixTime } from "./common";
 
 dotenv.config();
@@ -63,12 +63,12 @@ export class dbHandler {
 			result = await this.testConnection();
 		} catch (e) {
 			result = undefined;
-			logging.logProcessResult(false, e as string);
+			logging.logProcessResult(PR.failed, e as string);
 		}
 
 		logging.logProcessStart("Setting database bot info");
 		if (!result) {
-			logging.logProcessResult(false, "Connection test failed", true);
+			logging.logProcessResult(PR.skipped, "Connection test failed");
 			return false;
 		} else {
 			const UnixTimeStamp = getLocalUnixTime();
@@ -82,10 +82,10 @@ export class dbHandler {
 
 			try {
 				await this.updateBotInfo({ $set: set }, UnixTimeStamp);
-				logging.logProcessResult(true);
+				logging.logProcessResult(PR.success);
 				return true;
 			} catch (e: any) {
-				logging.logProcessResult(false, e);
+				logging.logProcessResult(PR.failed, e);
 				throw new Error(e);
 			}
 		}
@@ -109,7 +109,7 @@ export class dbHandler {
 				const res = JSON.stringify(response);
 				throw new EvalError(`Ping returned '${res}' (expected '{"ok":1}')`);
 			}
-			logging.logProcessResult(true);
+			logging.logProcessResult(PR.success);
 		} catch (e) {
 			error = e;
 		} finally {
@@ -136,11 +136,16 @@ export class dbHandler {
 			await this.client.close();
 		}
 
-		if (botInfo) return botInfo;
-		else
+		if (botInfo) {
+			botInfo._id = {
+				$oid: botInfo?._id as unknown as string,
+			};
+			return botInfo;
+		} else {
 			throw new Error(
 				"There was a problem retrieving bot information from the database => " + error
 			);
+		}
 	}
 
 	/**

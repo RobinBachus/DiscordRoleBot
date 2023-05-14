@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
 
-import { logging } from "./logging";
+import { PR, logging } from "./logging";
 import { cacheManager } from "./cacheManager";
 import { dbHandler } from "./dbHandler";
 import { jsonHandler } from "./jsonHandler";
@@ -27,6 +27,13 @@ export class botHelper {
 			success.push(false);
 		}
 
+		try {
+			await this.updateJsonCache();
+			success.push(true);
+		} catch (e) {
+			success.push(false);
+		}
+
 		logging.logInfoMessage("Initializing guilds");
 		const guilds = await client.guilds.fetch();
 
@@ -43,16 +50,21 @@ export class botHelper {
 		return success;
 	}
 
-	// TODO: Implement function
 	public async updateJsonCache() {
+		logging.logProcessStart("Updating cache.json from database");
 		let cache = {
 			bot_info: {},
 			guilds: Array<IGuild>(),
 		};
-		cache.bot_info = await this.db.getBotInfo();
-		cache.guilds = await this.db.find({} as IMultipleGuildSearch);
+		try {
+			cache.bot_info = await this.db.getBotInfo();
+			cache.guilds = await this.db.find({} as IMultipleGuildSearch);
 
-		this.json.jsonFile.writeJsonFile(cache as IJsonCacheData);
+			this.json.jsonFile.writeJsonFile(cache as IJsonCacheData);
+			logging.logProcessResult(PR.success);
+		} catch (e) {
+			logging.logProcessResult(PR.failed, e as string);
+		}
 	}
 
 	// TODO: Implement function

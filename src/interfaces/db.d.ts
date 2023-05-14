@@ -1,7 +1,5 @@
 /**
  * The types here should all work, but there are likely more that I mist.
- *
- * @inheritdoc
  */
 interface IMultipleGuildSearch {
 	guild_name?: string | { $in: string[] } | { $all: string[] };

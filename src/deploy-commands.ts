@@ -2,7 +2,7 @@ import { Routes } from "discord-api-types/v10";
 import { REST } from "@discordjs/rest";
 import fs from "node:fs";
 import * as dotenv from "dotenv";
-import * as _info from "./json/info.json";
+import * as _info from "./json/cache.json";
 
 dotenv.config();
 const info = _info as IJsonCacheData;

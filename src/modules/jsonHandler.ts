@@ -1,6 +1,6 @@
 import { writeFile } from "fs/promises";
 
-import * as info from "../json/info.json";
+import * as info from "../json/cache.json";
 
 import fs from "fs";
 
