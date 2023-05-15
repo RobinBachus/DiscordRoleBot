@@ -1,6 +1,6 @@
 {
     "name": "discord_role_bot",
-    "version": "0.6.1",
+    "version": "0.7.0",
     "description": "A Discord bot that assigns roles based on reactions",
     "main": "index.js",
     "scripts": {
