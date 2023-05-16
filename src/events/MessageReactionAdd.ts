@@ -1,8 +1,9 @@
-import { Events, GuildMember, Message, MessageReaction, User } from "discord.js";
+import { DiscordAPIError, Events, GuildMember, Message, MessageReaction, User } from "discord.js";
 
 import dotenv from "dotenv";
 
 import { jsonHandler } from "../modules/jsonHandler";
+import { LogLevel, logging } from "../modules/logging";
 
 dotenv.config();
 const json = new jsonHandler();
@@ -11,13 +12,13 @@ const TimeoutBuffer = new Map<Message, ReturnType<typeof setTimeout>>();
 
 module.exports = {
 	name: Events.MessageReactionAdd,
-	async execute(reaction: MessageReaction, user: User) {
-		console.log("Reaction received");
+	async execute(reaction: MessageReaction) {
+		logging.logMessage("Reaction received", LogLevel.DEBUG, false);
 
 		const message = reaction.message as Message;
 
-		let TimeOut = TimeoutBuffer.get(message);
-		if (TimeOut) clearTimeout(TimeOut);
+		let timeout = TimeoutBuffer.get(message);
+		if (timeout) clearTimeout(timeout);
 		TimeoutBuffer.set(message, setTimeout(processRoleChanges, 1500, message));
 	},
 };
@@ -29,16 +30,12 @@ async function processRoleChanges(message: Message) {
 	reactions.forEach(async (r) => {
 		const users = (await r.users.fetch()).filter((u) => !u.bot);
 		if (users.size !== 0) {
-			console.group(r.emoji.name);
-
 			users.forEach(async (user) => {
 				const usr = await message.guild?.members.fetch(user.id);
 				const role = getIRole(r);
 				if (usr && role) toggleRole(usr, role);
 				r.users.remove(user);
 			});
-
-			console.groupEnd();
 		}
 	});
 }
@@ -46,23 +43,26 @@ async function processRoleChanges(message: Message) {
 function getIRole(reaction: MessageReaction) {
 	const icon = reaction.emoji.name;
 	const guildID = reaction.message.guild?.id;
-	if (!icon || !guildID) {
-		console.warn(
-			`Received reaction with empty role or guild (role icon: ${icon}, guildID: ${guildID})`
-		);
-		return null;
-	}
-	const guild = json.guilds.findIGuildWithId(guildID);
-	if (!guild) {
-		console.warn(`Could not find guild with id '${guildID}'`);
-		return null;
-	}
 
-	const role = json.roles.findIRoleWithIcon(icon, guild);
-	if (!role) {
-		console.warn(
-			`Could not find role with icon '${icon} on guild '${guild.guild_name}' (id: ${guild.guild_id})`
-		);
+	let role: IRole | undefined;
+
+	try {
+		if (!icon || !guildID)
+			throw new Error(
+				`Received reaction with empty role or guild (role icon: ${icon}, guildID: ${guildID})`
+			);
+
+		const guild = json.guilds.findIGuildWithId(guildID);
+		if (!guild) throw new Error(`Could not find guild with id '${guildID}'`);
+
+		role = json.roles.findIRoleWithIcon(icon, guild);
+		if (!role)
+			throw new Error(
+				`Could not find role with icon '${icon} on guild '${guild.guild_name}' (id: ${guild.guild_id})`
+			);
+	} catch (e) {
+		const error = e as Error;
+		logging.logMessage(error.message, LogLevel.ERROR);
 		return null;
 	}
 
@@ -72,11 +72,28 @@ function getIRole(reaction: MessageReaction) {
 async function toggleRole(user: GuildMember, role: IRole) {
 	const id = role.role_id;
 	const _role = user.roles.cache.find((role) => role.id === id);
-	if (_role) {
-		user.roles.remove(_role);
-		console.log(`Removed role '${role.name}' from user ${user.displayName}`);
-	} else {
-		user.roles.add(id);
-		console.log(`Gave role '${role.name}' to user ${user.displayName}`);
+	let action: "ADD" | "REMOVE";
+	try {
+		if (_role) {
+			await user.roles.remove(_role);
+			action = "REMOVE";
+		} else {
+			await user.roles.add(id + 1);
+			action = "ADD";
+		}
+	} catch (e) {
+		if (e instanceof DiscordAPIError) {
+			let error = `${e.name}: ${e.message}`;
+			error = error
+				.split(/\n/)
+				.map((ele, i) => `${i === 0 ? "" : "    "} ${ele}`)
+				.join("\n");
+			const message = `Couldn't toggle role:\n  =>${error}`;
+			logging.logMessage(message, LogLevel.ERROR);
+			return null;
+		} else {
+			throw e;
+		}
 	}
+	logging.logRoleToggled(action, user.displayName, role.name, role.icon, user.guild.name);
 }

@@ -63,12 +63,12 @@ export class dbHandler {
 			result = await this.testConnection();
 		} catch (e) {
 			result = undefined;
-			logging.logProcessResult(PR.failed, e as string);
+			logging.logProcessResult(PR.FAILED, e as string);
 		}
 
 		logging.logProcessStart("Setting database bot info");
 		if (!result) {
-			logging.logProcessResult(PR.skipped, "Connection test failed");
+			logging.logProcessResult(PR.SKIPPED, "Connection test failed");
 			return false;
 		} else {
 			const UnixTimeStamp = getLocalUnixTime();
@@ -82,10 +82,10 @@ export class dbHandler {
 
 			try {
 				await this.updateBotInfo({ $set: set }, UnixTimeStamp);
-				logging.logProcessResult(PR.success);
+				logging.logProcessResult(PR.SUCCESS);
 				return true;
 			} catch (e: any) {
-				logging.logProcessResult(PR.failed, e);
+				logging.logProcessResult(PR.FAILED, e);
 				throw new Error(e);
 			}
 		}
@@ -109,7 +109,7 @@ export class dbHandler {
 				const res = JSON.stringify(response);
 				throw new EvalError(`Ping returned '${res}' (expected '{"ok":1}')`);
 			}
-			logging.logProcessResult(PR.success);
+			logging.logProcessResult(PR.SUCCESS);
 		} catch (e) {
 			error = e;
 		} finally {

@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
 
-import { PR, logging } from "./logging";
+import { LogLevel, PR, logging } from "./logging";
 import { cacheManager } from "./cacheManager";
 import { dbHandler } from "./dbHandler";
 import { jsonHandler } from "./jsonHandler";
@@ -20,7 +20,7 @@ export class botHelper {
 		// TODO: Add initializer for json file and json handler
 		let success = new Array<boolean>();
 
-		logging.logInfoMessage("Setting up database");
+		logging.logMessage("Setting up database", LogLevel.INFO);
 		try {
 			success.push(await this.db.init());
 		} catch (e) {
@@ -34,7 +34,7 @@ export class botHelper {
 			success.push(false);
 		}
 
-		logging.logInfoMessage("Initializing guilds");
+		logging.logMessage("Initializing guilds", LogLevel.INFO);
 		const guilds = await client.guilds.fetch();
 
 		for (let g of guilds) {
@@ -61,9 +61,9 @@ export class botHelper {
 			cache.guilds = await this.db.find({} as IMultipleGuildSearch);
 
 			this.json.jsonFile.writeJsonFile(cache as IJsonCacheData);
-			logging.logProcessResult(PR.success);
+			logging.logProcessResult(PR.SUCCESS);
 		} catch (e) {
-			logging.logProcessResult(PR.failed, e as string);
+			logging.logProcessResult(PR.FAILED, e as string);
 		}
 	}
 

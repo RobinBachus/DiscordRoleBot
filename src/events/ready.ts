@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 import { colors, getDateTimeString } from "../modules/common";
 import { botHelper } from "../modules/botHelper";
-import { logging } from "../modules/logging";
+import { LogLevel, logging } from "../modules/logging";
 
 dotenv.config();
 
@@ -14,9 +14,13 @@ module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	async execute(client: Client) {
-		logging.logInfoMessage(`Started on ${getDateTimeString()}`);
+		logging.logMessage(`Started on ${getDateTimeString()}`, LogLevel.INFO);
 		if (!client.user) throw new Error("Client has no user!");
-		logging.logInfoMessage(`Client successfully logged in as ${client.user.tag}`, false);
+		logging.logMessage(
+			`Client successfully logged in as ${client.user.tag}`,
+			LogLevel.INFO,
+			false
+		);
 
 		const initSuccessList = await bot.initialize(client);
 
