@@ -19,7 +19,7 @@ module.exports = {
 
 		let timeout = TimeoutBuffer.get(message);
 		if (timeout) clearTimeout(timeout);
-		TimeoutBuffer.set(message, setTimeout(processRoleChanges, 1500, message));
+		TimeoutBuffer.set(message, setTimeout(processRoleChanges, 1000, message));
 	},
 };
 
@@ -49,7 +49,9 @@ function getIRole(reaction: MessageReaction) {
 	try {
 		if (!icon || !guildID)
 			throw new Error(
-				`Received reaction with empty role or guild (role icon: ${icon}, guildID: ${guildID})`
+				`Received reaction with empty role or guild 
+				(role icon: ${icon ?? "not found"}
+				, guildID: ${guildID ?? "not found"})`
 			);
 
 		const guild = json.guilds.findIGuildWithId(guildID);
@@ -86,9 +88,11 @@ async function toggleRole(user: GuildMember, role: IRole) {
 			let error = `${e.name}: ${e.message}`;
 			error = error
 				.split(/\n/)
-				.map((ele, i) => `${i === 0 ? "" : "    "} ${ele}`)
+				.map((ele, i) => `     => ${ele}`)
 				.join("\n");
-			const message = `Couldn't toggle role:\n  =>${error}`;
+			const roleStr = `'${role.name} (id: ${role.role_id})'`;
+			const userStr = `'${user.displayName} (id: ${user.id})'`;
+			const message = `Couldn't toggle role ${roleStr} to ${userStr}:\n${error}`;
 			logging.logMessage(message, LogLevel.ERROR);
 			return null;
 		} else {

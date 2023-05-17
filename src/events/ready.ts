@@ -2,7 +2,7 @@ import { Client, Events } from "discord.js";
 
 import dotenv from "dotenv";
 
-import { colors, getDateTimeString } from "../modules/common";
+import { Color, getDateTimeString } from "../modules/common";
 import { botHelper } from "../modules/botHelper";
 import { LogLevel, logging } from "../modules/logging";
 
@@ -24,15 +24,15 @@ module.exports = {
 
 		const initSuccessList = await bot.initialize(client);
 
-		console.log(colors.Bright + "");
+		console.log(Color.Bright + "");
 
 		const initSuccess = !initSuccessList.includes(false);
 
 		if (initSuccess) {
-			console.log(colors.FgGreen + "ready!" + colors.Reset + "\n");
+			console.log(Color.FgGreen + "ready!" + Color.Reset + "\n");
 		} else {
 			console.log(
-				colors.FgRed + "Failed to properly initialize, exiting..." + colors.Reset + "\n"
+				Color.FgRed + "Failed to properly initialize, exiting..." + Color.Reset + "\n"
 			);
 			process.exit(1);
 		}

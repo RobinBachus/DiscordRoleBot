@@ -1,5 +1,9 @@
-import { colors } from "./common";
+import { Color, colorText } from "./common";
 
+/**
+ * The levels that a message can be logged on.
+ * Lower log level means less messages
+ */
 export enum LogLevel {
 	FATAL,
 	ERROR,
@@ -13,7 +17,7 @@ export enum LogLevel {
  * Values that indicate the result of a process
  */
 export enum PR {
-	SUCCESS,
+	OK,
 	FAILED,
 	SKIPPED,
 }
@@ -23,7 +27,7 @@ export enum PR {
  */
 export class logging {
 	/** The log level for this instance. */
-	private static logLevel = LogLevel.INFO;
+	private static logLevel = LogLevel.TRACE;
 
 	/**
 	 * Changes the log level
@@ -39,10 +43,11 @@ export class logging {
 	 * @param processDescription A description of the process being performed.
 	 */
 	static logUpdateStart(guildName: string, processDescription: string) {
-		if (this.logLevel < LogLevel.INFO) return;
-		const message =
-			`Updating ${colors.FgBlue}${guildName}${colors.Reset} ${processDescription}`.padEnd(60);
-		process.stdout.write(message);
+		if (this.logLevel >= LogLevel.INFO) {
+			const guild = colorText(Color.FgBlue, guildName);
+			const message = `Updating ${guild} ${processDescription}`.padEnd(60);
+			process.stdout.write(message);
+		}
 	}
 
 	/**
@@ -50,8 +55,7 @@ export class logging {
 	 * @param processDescription
 	 */
 	static logProcessStart(processDescription: string) {
-		if (this.logLevel < LogLevel.INFO) return;
-		process.stdout.write(processDescription.padEnd(51));
+		if (this.logLevel >= LogLevel.INFO) process.stdout.write(processDescription.padEnd(51));
 	}
 
 	/**
@@ -60,9 +64,11 @@ export class logging {
 	 * @param guildName The name of the guild from which the data is being fetched.
 	 */
 	static logFetch(type: string, guildName: string) {
-		if (this.logLevel < LogLevel.INFO) return;
-		const message = `Fetching ${type} ${colors.FgCyan}'${guildName}'${colors.Reset}`.padEnd(60);
-		process.stdout.write(message);
+		if (this.logLevel >= LogLevel.INFO) {
+			const guild = colorText(Color.FgCyan, guildName);
+			const message = `Fetching ${type} '${guild}`.padEnd(60);
+			process.stdout.write(message);
+		}
 	}
 
 	/**
@@ -70,44 +76,33 @@ export class logging {
 	 * @param processResult The resulting state of the process
 	 * @param reason The reason for a failed or skipped process.
 	 */
-	static logProcessResult(processResult: PR.SUCCESS): void;
-	static logProcessResult(success: PR.FAILED | PR.SKIPPED, reason: string): void;
-	static logProcessResult(success = PR.SUCCESS, reason?: string) {
-		if (this.logLevel <= LogLevel.INFO)
-			switch (success) {
-				case PR.SUCCESS:
-					console.log(colors.FgGreen + "OK" + colors.Reset);
-					break;
-				case PR.FAILED:
-					if (this.logLevel >= LogLevel.WARN)
-						console.log(colors.FgYellow + "SKIPPED | " + reason + colors.Reset);
-					break;
-				case PR.SKIPPED:
-					console.log(colors.FgRed + "FAILED  | " + reason + colors.Reset);
-					break;
-			}
+	static logProcessResult(processResult: PR.OK): void;
+	static logProcessResult(processResult: PR.FAILED | PR.SKIPPED, reason: string): void;
+	static logProcessResult(processResult = PR.OK, reason?: string) {
+		const Colors = [Color.FgGreen, Color.FgRed, Color.FgYellow];
+		if (this.logLevel < LogLevel.INFO) return;
+		const r = reason ? ` | ${reason}` : "";
+		console.log(colorText(Colors[processResult], PR[processResult] + r));
 	}
 
 	/**
-	 * Logs an error message.
+	 * Logs a message with appropriate tag and color based on log level.
 	 * @param message The message to log.
+	 * @param level The level the message should be logged at
 	 * @param [newline=true] If the message should be printed on a new line. Default is ´true´
 	 */
 	static logMessage(message: string, level: LogLevel, newline = true) {
-		const levelColors = [
-			colors.BgRed,
-			colors.FgRed,
-			colors.FgYellow,
-			colors.FgBlue,
-			colors.FgGray,
-			colors.BgGray,
+		const Colors = [
+			Color.BgRed,
+			Color.FgRed,
+			Color.FgYellow,
+			Color.FgBlue,
+			Color.FgGray,
+			Color.BgGray,
 		];
 		if (this.logLevel < level) return;
-		console.log(
-			`${newline ? "\n" : ""}${levelColors[level]}[${LogLevel[level]}]${
-				colors.Reset
-			} ${message}`
-		);
+		const levelString = colorText(Colors[level], LogLevel[level]);
+		console.log(`${newline ? "\n" : ""}${levelString} ${message}`);
 	}
 
 	/**
@@ -125,6 +120,7 @@ export class logging {
 		roleIcon?: string,
 		guildName?: string
 	) {
+		// Only logs messages if log level is set to info or higher
 		if (this.logLevel < LogLevel.INFO) return;
 
 		// Check if role name has an icon to include
@@ -132,20 +128,23 @@ export class logging {
 		role += roleName;
 
 		// Check if the guild name should be mentioned in the log message
-		let guild = guildName ? `on server '${colors.FgCyan}${guildName}${colors.Reset}'` : "";
+		let guild = guildName ? `on server '${colorText(Color.FgCyan, guildName)}'` : "";
 
 		// Set username color
 		// The color might be associated with certain servers later
-		username = `${colors.FgBlue}${username}${colors.Reset}`;
+		username = colorText(Color.FgBlue, username);
 
-		// Set the message according to the action performed
+		// Set the message with appropriate colors according to the action performed
+		let actionString;
 		let message = "";
 		switch (roleAction) {
 			case "ADD":
-				message = `${colors.FgGreen}Gave${colors.Reset} role '${role}' to user ${username} ${guild}`;
+				actionString = colorText(Color.FgGreen, "Gave");
+				message = `${actionString} role '${role}' to user ${username} ${guild}`;
 				break;
 			case "REMOVE":
-				message = `${colors.FgRed}Removed${colors.Reset} role '${role}' from user ${username} ${guild}`;
+				actionString = colorText(Color.FgRed, "Removed");
+				message = `${actionString} role '${role}' from user ${username} ${guild}`;
 				break;
 		}
 		// Log the message

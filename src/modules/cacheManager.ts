@@ -10,7 +10,7 @@ export class cacheManager {
 		logging.logFetch("guild", OAuth2Guild.name);
 		return await OAuth2Guild.fetch()
 			.then((guild) => {
-				logging.logProcessResult(PR.SUCCESS);
+				logging.logProcessResult(PR.OK);
 				return guild;
 			})
 			.catch((reason) => {
@@ -25,7 +25,7 @@ export class cacheManager {
 		const success = await discordGuild.members
 			.fetch({ time: timeout, force: true })
 			.then(() => {
-				logging.logProcessResult(PR.SUCCESS);
+				logging.logProcessResult(PR.OK);
 				return true;
 			})
 			.catch((reason) => {
@@ -67,7 +67,7 @@ export class cacheManager {
 					logging.logProcessResult(PR.FAILED, reason);
 					return null;
 				}
-				logging.logProcessResult(PR.SUCCESS);
+				logging.logProcessResult(PR.OK);
 				return channel;
 			})
 			.catch((reason) => {
@@ -89,7 +89,7 @@ export class cacheManager {
 		const success = await channel.messages
 			.fetch({ cache: true })
 			.then(() => {
-				logging.logProcessResult(PR.SUCCESS);
+				logging.logProcessResult(PR.OK);
 				return true;
 			})
 			.catch((reason) => {

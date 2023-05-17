@@ -1,4 +1,4 @@
-export enum colors {
+export enum Color {
 	Reset = "\x1b[0m",
 	Bright = "\x1b[1m",
 	Dim = "\x1b[2m",
@@ -58,4 +58,11 @@ export function getOffsetMs(date = new Date()) {
 
 export function getLocalUnixTime(date = new Date()) {
 	return date.getTime() + getOffsetMs(date);
+}
+
+export function colorText(color: Color | Color[], message: string) {
+	let colorString = "";
+	if (Array.isArray(color)) colorString = color.join("");
+	else colorString = color;
+	return `${colorString}${message}${Color.Reset}`;
 }

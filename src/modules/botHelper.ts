@@ -61,7 +61,7 @@ export class botHelper {
 			cache.guilds = await this.db.find({} as IMultipleGuildSearch);
 
 			this.json.jsonFile.writeJsonFile(cache as IJsonCacheData);
-			logging.logProcessResult(PR.SUCCESS);
+			logging.logProcessResult(PR.OK);
 		} catch (e) {
 			logging.logProcessResult(PR.FAILED, e as string);
 		}

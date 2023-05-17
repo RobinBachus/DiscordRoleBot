@@ -82,7 +82,7 @@ export class dbHandler {
 
 			try {
 				await this.updateBotInfo({ $set: set }, UnixTimeStamp);
-				logging.logProcessResult(PR.SUCCESS);
+				logging.logProcessResult(PR.OK);
 				return true;
 			} catch (e: any) {
 				logging.logProcessResult(PR.FAILED, e);
@@ -109,7 +109,7 @@ export class dbHandler {
 				const res = JSON.stringify(response);
 				throw new EvalError(`Ping returned '${res}' (expected '{"ok":1}')`);
 			}
-			logging.logProcessResult(PR.SUCCESS);
+			logging.logProcessResult(PR.OK);
 		} catch (e) {
 			error = e;
 		} finally {
