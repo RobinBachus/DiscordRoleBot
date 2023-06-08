@@ -60,7 +60,7 @@ function getIRole(reaction: MessageReaction) {
 		role = json.roles.findIRoleWithIcon(icon, guild);
 		if (!role)
 			throw new Error(
-				`Could not find role with icon '${icon} on guild '${guild.guild_name}' (id: ${guild.guild_id})`
+				`Could not find role with icon '${icon}' on guild '${guild.guild_name}' (id: ${guild.guild_id})`
 			);
 	} catch (e) {
 		const error = e as Error;

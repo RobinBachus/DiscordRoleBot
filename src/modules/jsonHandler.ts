@@ -1,6 +1,6 @@
 import { writeFile } from "fs/promises";
 
-import * as info from "../json/cache.json";
+import * as info from "../../src/json/cache.json";
 
 import fs from "fs";
 
@@ -26,7 +26,8 @@ export class jsonHandler {
 	 * @internal
 	 */
 	private file: IJsonCacheData;
-	private filePath: string = __dirname + "\\..\\json\\cache.json";
+	// The source json file is always used to enable importing
+	private filePath: string = __dirname + "\\..\\..\\src\\json\\cache.json";
 
 	jsonFile = {
 		/**

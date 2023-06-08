@@ -5,7 +5,7 @@ import { cacheManager } from "./cacheManager";
 import { dbHandler } from "./dbHandler";
 import { jsonHandler } from "./jsonHandler";
 
-export class botHelper {
+export class botManager {
 	private json: jsonHandler;
 	private cache: cacheManager;
 	private db: dbHandler;
