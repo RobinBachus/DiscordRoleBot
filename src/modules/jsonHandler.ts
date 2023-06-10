@@ -3,6 +3,7 @@ import { writeFile } from "fs/promises";
 import * as info from "../../src/json/cache.json";
 
 import fs from "fs";
+import { Client } from "discord.js";
 
 export class jsonHandler {
 	/**

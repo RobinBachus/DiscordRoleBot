@@ -49,4 +49,9 @@ export class utils {
 		const _role = await _guild.roles.fetch(role.role_id);
 		return _role?.members || Promise.reject("role does not exist");
 	}
+
+	static getEmojiFromName(client: Client, emojiName: string) {
+		const emoji = client.emojis.cache.find((e) => e.name === emojiName);
+		return emoji;
+	}
 }

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import { jsonHandler } from "../modules/jsonHandler";
 import { LogLevel, logging } from "../modules/logging";
+import { utils } from "../modules/botUtils";
 
 dotenv.config();
 const json = new jsonHandler();
@@ -41,7 +42,12 @@ async function processRoleChanges(message: Message) {
 }
 
 function getIRole(reaction: MessageReaction) {
-	const icon = reaction.emoji.name;
+	// This enables using custom emojis by id
+	let _icon = reaction.emoji.name ?? undefined;
+	if (_icon && _icon.length > 2) _icon = utils.getEmojiFromName(reaction.client, _icon)?.id;
+	if (!_icon) throw new Error(`Received invalid emoji '${reaction.emoji.name}'`);
+	const icon = _icon;
+
 	const guildID = reaction.message.guild?.id;
 
 	let role: IRole | undefined;
@@ -80,7 +86,7 @@ async function toggleRole(user: GuildMember, role: IRole) {
 			await user.roles.remove(_role);
 			action = "REMOVE";
 		} else {
-			await user.roles.add(id + 1);
+			await user.roles.add(id);
 			action = "ADD";
 		}
 	} catch (e) {
