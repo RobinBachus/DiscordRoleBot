@@ -66,7 +66,7 @@ export class logging {
 	static logFetch(type: string, guildName: string) {
 		if (this.logLevel >= LogLevel.INFO) {
 			const guild = colorText(Color.FgCyan, guildName);
-			const message = `Fetching ${type} '${guild}`.padEnd(60);
+			const message = `Fetching ${type} '${guild}'`.padEnd(60);
 			process.stdout.write(message);
 		}
 	}
@@ -89,7 +89,7 @@ export class logging {
 	 * Logs a message with appropriate tag and color based on log level.
 	 * @param message The message to log.
 	 * @param level The level the message should be logged at
-	 * @param [newline=true] If the message should be printed on a new line. Default is ´true´
+	 * @param [newline=true] If the message should be printed on a new line. Default is `true`
 	 */
 	static logMessage(message: string, level: LogLevel, newline = true) {
 		const Colors = [

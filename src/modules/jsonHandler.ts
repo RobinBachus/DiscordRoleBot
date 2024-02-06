@@ -3,7 +3,6 @@ import { writeFile } from "fs/promises";
 import * as info from "../../src/json/cache.json";
 
 import fs from "fs";
-import { Client } from "discord.js";
 
 export class jsonHandler {
 	/**
@@ -88,19 +87,6 @@ export class jsonHandler {
 		},
 	};
 
-	state: IState = {
-		update: {
-			errorMessage: undefined,
-			lastUpdate: new Date(),
-			lastSuccessfulUpdate: undefined,
-		},
-		write: {
-			errorMessage: undefined,
-			lastWrite: new Date(),
-			lastSuccessfulWrite: undefined,
-		},
-	};
-
 	/**
 	 * Holds methods to find a role or groups of roles in the json file
 	 */
@@ -157,6 +143,19 @@ export class jsonHandler {
 
 		findIGuildWithName: (name: string) => {
 			return info.guilds.find((r) => r.guild_name === name) as IGuild | undefined;
+		},
+	};
+
+	state: IState = {
+		update: {
+			errorMessage: undefined,
+			lastUpdate: new Date(),
+			lastSuccessfulUpdate: undefined,
+		},
+		write: {
+			errorMessage: undefined,
+			lastWrite: new Date(),
+			lastSuccessfulWrite: undefined,
 		},
 	};
 }

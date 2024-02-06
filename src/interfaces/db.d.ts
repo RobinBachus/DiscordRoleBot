@@ -42,20 +42,20 @@ interface IUpdate<T> {
 /**
  * Is thrown if a guild is not found
  */
-class GuildNotFoundError extends DBError {
-	/**
-	 * @param guildName Optional guild name to display in errors
-	 */
-	constructor(message?: string, guildName?: string, guildID?: string) {
-		this.message = (message || "") + "Could not find specified guild";
-		if (guildName || guildID) {
-			this.message += " ( ";
-			if (guildName) this.message += `name: '${guildName} '`;
-			if (guildID) this.message += `id: '${guildID} '`;
-			this.message += ")";
-		}
-	}
+// export class GuildNotFoundError extends DBError {
+// 	/**
+// 	 * @param guildName Optional guild name to display in errors
+// 	 */
+// 	constructor(message?: string, guildName?: string, guildID?: string) {
+// 		super()
+// 		this.message = (message || "") + "Could not find specified guild";
+// 		if (guildName || guildID) {
+// 			this.message += " ( ";
+// 			if (guildName) this.message += `name: '${guildName} '`;
+// 			if (guildID) this.message += `id: '${guildID} '`;
+// 			this.message += ")";
+// 		}
+// 	}
 
-	guildName?: string;
-}
-class DBError extends Error {}
+// 	guildName?: string;
+// }

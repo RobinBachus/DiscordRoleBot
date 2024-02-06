@@ -2,7 +2,6 @@ node_modules
 .env
 src/json/*
 .idea
-# TODO uncomment tests (disables spelling checker)
 tests/
 dist/
 .vscode/settings.json

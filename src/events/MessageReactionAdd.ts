@@ -1,4 +1,11 @@
-import { DiscordAPIError, Events, GuildMember, Message, MessageReaction, User } from "discord.js";
+import {
+	DiscordAPIError,
+	Events,
+	GuildMember,
+	Message,
+	MessageReaction,
+	TextChannel,
+} from "discord.js";
 
 import dotenv from "dotenv";
 
@@ -14,6 +21,10 @@ const TimeoutBuffer = new Map<Message, ReturnType<typeof setTimeout>>();
 module.exports = {
 	name: Events.MessageReactionAdd,
 	async execute(reaction: MessageReaction) {
+		if (reaction.count <= 1) {
+			logging.logMessage("Reaction was added to a message", LogLevel.TRACE, false);
+			return;
+		}
 		logging.logMessage("Reaction received", LogLevel.DEBUG, false);
 
 		const message = reaction.message as Message;
@@ -26,19 +37,38 @@ module.exports = {
 
 async function processRoleChanges(message: Message) {
 	message = await message.fetch();
+	const guild = await message.guild?.fetch();
+	if (!guild) {
+		logging.logMessage("Could not find guild to process role change", LogLevel.ERROR);
+		return;
+	}
 	const reactions = message.reactions.cache;
 
-	reactions.forEach(async (r) => {
-		const users = (await r.users.fetch()).filter((u) => !u.bot);
+	for (const reaction of reactions.values()) {
+		const users = (await reaction.users.fetch()).filter((u) => !u.bot);
 		if (users.size !== 0) {
 			users.forEach(async (user) => {
-				const usr = await message.guild?.members.fetch(user.id);
-				const role = getIRole(r);
+				const usr = await guild.members.fetch(user.id);
+				const role = getIRole(reaction);
 				if (usr && role) toggleRole(usr, role);
-				r.users.remove(user);
+				await reaction.users.remove(user);
 			});
 		}
-	});
+	}
+
+	const iGuild = json.guilds.findIGuildWithId(guild.id);
+	if (!iGuild) {
+		logging.logMessage(
+			`Could not find guild '${guild.name}'(id: '${guild.id}) in database`,
+			LogLevel.WARN
+		);
+		return;
+	}
+	utils.UpdateRoleMessageIfNewer(
+		message.client,
+		iGuild,
+		(await message.channel.fetch()) as TextChannel
+	);
 }
 
 function getIRole(reaction: MessageReaction) {
@@ -94,7 +124,7 @@ async function toggleRole(user: GuildMember, role: IRole) {
 			let error = `${e.name}: ${e.message}`;
 			error = error
 				.split(/\n/)
-				.map((ele, i) => `     => ${ele}`)
+				.map((ele) => `     => ${ele}`)
 				.join("\n");
 			const roleStr = `'${role.name} (id: ${role.role_id})'`;
 			const userStr = `'${user.displayName} (id: ${user.id})'`;
