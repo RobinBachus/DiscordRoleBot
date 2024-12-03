@@ -1,6 +1,9 @@
 node_modules
 .env
-info.json
+src/json/*
 .idea
 tests/
 dist/
+.vscode/settings.json
+certs/
+.VSCodeCounter/
