@@ -1,0 +1,80 @@
+{
+	"bot_info": {
+		"id": "926211660849500190",
+		"name": "RoleAssignBot"
+	},
+	"guilds": [
+		{
+			"guild_name": "The New Religion",
+			"guild_id": "635436592013508609",
+			"roles": [
+				{
+					"icon": "💰",
+					"name": "GTA",
+					"role_id": "673632879942565888"
+				},
+				{
+					"icon": "⚙️",
+					"name": "Volcanoids",
+					"role_id": "876515756777541653"
+				},
+				{
+					"icon": "🏭",
+					"name": "Satisfactory",
+					"role_id": "876516149137907723"
+				},
+				{
+					"icon": "🦖",
+					"name": "ARK",
+					"role_id": "876516028325187585"
+				},
+				{
+					"icon": "🔪",
+					"name": "Among Us",
+					"role_id": "876509430341058570"
+				},
+				{
+					"icon": "🏴‍☠️",
+					"name": "Sea Of Thieves",
+					"role_id": "925868985935859713"
+				},
+				{
+					"icon": "🎭",
+					"name": "Dead By Daylight",
+					"role_id": "876507309843554304"
+				}
+			],
+			"roles_channel": {
+				"channel_name": "⚖-roles-⚖",
+				"channel_id": "927168489075126282",
+				"message": "This bot is still being developed and will change over time \n\nUse 'RAB info' for more information\nUse 'RAB help' for more commands\n\nClick on the emoji to get the corresponding role\nClick again to remove the role\n\n**Roles:**"
+			}
+		},
+		{
+			"guild_name": "Bot Test Server",
+			"guild_id": "926158974074638456",
+			"roles": [
+				{
+					"icon": "💰",
+					"name": "Admin",
+					"role_id": "926467519236165644"
+				},
+				{
+					"icon": "⚙️",
+					"name": "Test Role",
+					"role_id": "926159528549056593"
+				},
+				{
+					"icon": "🎭",
+					"name": "Starter",
+					"role_id": "926467631886778448"
+				}
+			],
+			"roles_channel": {
+				"channel_name": "roles",
+				"channel_id": "927026779628126228",
+				"message": "This bot is still being developed and will change over time \n\nUse 'RAB info' for more information\nUse 'RAB help' for more commands\n\nClick on the emoji to get the corresponding role\nClick again to remove the role\n\n**Roles:**"
+			}
+		}
+	]
+}

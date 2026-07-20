@@ -21,3 +21,11 @@ V0.4:
 
 - bot now only reacts to reactions on messages in roles channel
 - bot now only sends welcome message if no welcome message exists
+
+V0.5:
+
+- moved source into src/ and compile output into dist/
+- guilds, roles, and role messages are now loaded from JSON config (dev/prod) instead of being hardcoded
+- bot can set up roles for multiple guilds from config
+- role message is built from config and edited if it no longer matches
+- added simple log helpers (info / warn / error)

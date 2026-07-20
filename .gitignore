@@ -1,6 +1,11 @@
+# Dependencies
 node_modules
-.env
+
+# IDE files
 .idea
-commands
-message_objects
-test.js
+
+# Output files
+dist
+
+# Environment variables
+.env
