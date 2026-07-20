@@ -13,8 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^13.17.1",
-    "dotenv": "^17.4.2",
-    "wokcommands": "^1.5.3"
+    "dotenv": "^17.4.2"
   },
   "devDependencies": {
     "typescript": "^4.9.5"
