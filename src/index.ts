@@ -1,11 +1,12 @@
 import DiscordJS, {
-    Intents,
+    GatewayIntentBits,
     Message,
     MessageReaction,
     TextChannel,
     User,
 } from "discord.js";
 import { IGuild, loadConfig } from "./config";
+import { ICommand, commands } from "./commands";
 import { log, error } from "./log";
 import dotenv from "dotenv";
 
@@ -15,13 +16,14 @@ const config = loadConfig();
 
 const client = new DiscordJS.Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessageReactions,
     ],
 });
 
-client.on("ready", ready);
+client.on("clientReady", ready);
 
 client.on(
     "messageReactionAdd",
@@ -35,61 +37,16 @@ client.on(
 );
 
 client.on("messageCreate", (message) => {
-    if (message.content === "RAB status") {
-        message.reply({
-            content: "currently running!",
-        });
-        log(
-            "replied to 'status' command from '" +
-                message.author.username +
-                "' on '" +
-                message.guild?.name +
-                "'",
-        );
+    for (let command of commands) {
+        if (
+            message.content.toLowerCase().trim() ===
+            `rab ${command.name.toLowerCase()}`
+        ) {
+            replyToCommand(message, command);
+            return;
+        }
     }
 });
-
-client.on("messageCreate", (message) => {
-    if (message.content === "RAB info") {
-        message.reply({
-            content: `Made by Robin Bachus\nVersion: ${getVersion()}\nCheck my source code here: github.com/RobinBachus/DiscordRoleBot\n\nSorry for spaghetti code 🙃`,
-        });
-        log(
-            "replied to 'info' command from '" +
-                message.author.username +
-                "' on '" +
-                message.guild?.name +
-                "'",
-        );
-    }
-});
-
-client.on("messageCreate", (message) => {
-    if (message.content === "RAB help") {
-        message.reply({
-            content:
-                "- RAB info:     info about the bot\n- RAB status:     check if the bot is running\n",
-        });
-        log(
-            "replied to 'help' command from '" +
-                message.author.username +
-                "' on '" +
-                message.guild?.name +
-                "'",
-        );
-    }
-});
-
-function getVersion() {
-    const fs = require("fs");
-
-    try {
-        const data = fs.readFileSync("version.txt", "utf8");
-        return data;
-    } catch (err) {
-        error("Failed to get version", err as Error);
-    }
-}
 
 client.login(process.env.TOKEN);
 
@@ -240,5 +197,14 @@ async function onReactionRemove(reaction: MessageReaction, user: User) {
 
     log(
         `${user.username} removed the ${role.name} role on ${reaction.message.guild?.name}`,
+    );
+}
+
+function replyToCommand(message: Message, command: ICommand) {
+    message.reply({
+        content: command.message,
+    });
+    log(
+        `Replied to command ${command.name} from ${message.author.username} on ${message.guild?.name}`,
     );
 }

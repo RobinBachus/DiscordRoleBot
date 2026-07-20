@@ -29,3 +29,13 @@ V0.5:
 - bot can set up roles for multiple guilds from config
 - role message is built from config and edited if it no longer matches
 - added simple log helpers (info / warn / error)
+
+V0.2.1:
+
+- Changed versioning to use semantic versioning instead of V0.X
+- Security updates
+
+V0.2.2:
+
+- Moved commands to src/commands.ts
+- Added versioning git action
