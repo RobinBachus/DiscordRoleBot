@@ -6,12 +6,7 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      - name: "dependencies"
-        dependencies:
-          - package-ecosystem: "npm"
-            directory: "/"
-            package-file: "package.json"
-            update-types: [ "version" ]
-          - package-ecosystem: "npm"
-            directory: "/"
-            package-file: "package-lock.json"
+      dev-deps:
+        dependency-type: "development"
+      prod-deps:
+        dependency-type: "production"
