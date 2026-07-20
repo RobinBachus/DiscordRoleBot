@@ -1,0 +1,38 @@
+{
+	"bot_info": {
+		"id": "926211660849500190",
+		"name": "RoleAssignBot",
+		"version": "",
+		"start_date": "",
+		"start_time": "",
+		"guild_amount": 0
+	},
+	"guilds": [
+		{
+			"guild_name": "Bot Test Server",
+			"guild_id": "926158974074638456",
+			"roles": [
+				{
+					"icon": "💰",
+					"name": "Admin",
+					"role_id": "926467519236165644"
+				},
+				{
+					"icon": "⚙️",
+					"name": "Test Role",
+					"role_id": "926159528549056593"
+				},
+				{
+					"icon": "🎭",
+					"name": "Starter",
+					"role_id": "926467631886778448"
+				}
+			],
+			"roles_channel": {
+				"channel_name": "roles",
+				"channel_id": "927026779628126228",
+				"message": "**This is a development server for the RoleAssignBot.**\n\nThis bot is still being developed and will change over time \n\nUse 'RAB info' for more information\nUse 'RAB help' for more commands\n\nClick on the emoji to get the corresponding role\nClick again to remove the role\n\n**Roles:**"
+			}
+		}
+	]
+}
