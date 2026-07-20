@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^13.17.1",
+    "discord.js": "^14.27.0",
     "dotenv": "^17.4.2",
-    "wokcommands": "^1.5.3"
+    "wokcommands": "^2.1.9"
   },
   "devDependencies": {
     "typescript": "^4.9.5"
