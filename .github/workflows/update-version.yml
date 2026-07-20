@@ -12,6 +12,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+              with:
+                  # Release events check out the tag (detached HEAD).
+                  # Commit version.txt on the default branch instead.
+                  ref: ${{ github.event.repository.default_branch }}
 
             - name: Write version.txt
               run: echo "${{ github.event.release.name }}" > version.txt
